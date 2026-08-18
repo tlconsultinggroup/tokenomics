@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SettingsResponse {
     pub refresh_interval_secs: u64,
     pub currency: String,
@@ -11,6 +12,7 @@ pub struct SettingsResponse {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PathsResponse {
     pub enabled_clients: Vec<String>,
     pub extra_dirs: Vec<(String, String)>,

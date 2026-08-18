@@ -2,6 +2,7 @@ use crate::error::Result;
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ScanResult {
     pub files_scanned: usize,
     pub sessions_found: usize,
