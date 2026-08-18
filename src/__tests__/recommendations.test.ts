@@ -8,6 +8,8 @@ const mockData: DailyData = {
   totalTokens: 200000,
   inputTokens: 170000,
   outputTokens: 30000,
+  cacheReadTokens: 0,
+  cacheWriteTokens: 0,
   sessionCount: 5,
   avgCostPerSession: 12.0,
   costByModel: {

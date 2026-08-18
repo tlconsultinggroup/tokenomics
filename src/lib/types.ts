@@ -4,6 +4,8 @@ export interface DailyData {
   totalTokens: number;
   inputTokens: number;
   outputTokens: number;
+  cacheReadTokens: number;
+  cacheWriteTokens: number;
   sessionCount: number;
   avgCostPerSession: number;
   costByModel: Record<string, number>;

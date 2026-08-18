@@ -78,7 +78,12 @@ export default function SummaryCards({ data }: SummaryCardsProps) {
       <Card
         label="Total tokens"
         value={`${(data.totalTokens / 1000).toFixed(0)}k`}
-        subtext={`In ${(data.inputTokens / 1000).toFixed(1)}k, out ${(data.outputTokens / 1000).toFixed(1)}k`}
+        subtext={
+          `In ${(data.inputTokens / 1000).toFixed(1)}k, out ${(data.outputTokens / 1000).toFixed(1)}k` +
+          (data.cacheReadTokens + data.cacheWriteTokens > 0
+            ? `, cache ${((data.cacheReadTokens + data.cacheWriteTokens) / 1000).toFixed(1)}k`
+            : "")
+        }
       />
       <Card
         label="Avg cost / session"
