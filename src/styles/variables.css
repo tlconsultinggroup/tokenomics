@@ -32,9 +32,11 @@
   --color-danger-bg: #fef2f2;
 
   /* Surface and text roles */
-  --color-bg-page: #f8fafc;
+  --color-bg-page: #faf9f8;
+  --color-bg-header: var(--slate-100);
   --color-bg-surface: #ffffff;
   --color-bg-surface-muted: var(--slate-50);
+  --color-bg-row-hover: rgba(59, 130, 246, 0.06);
 
   --color-text-primary: var(--slate-900);
   --color-text-secondary: var(--slate-500);
@@ -83,8 +85,10 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg-page: var(--slate-900);
+    --color-bg-header: #16213a;
     --color-bg-surface: var(--slate-800);
     --color-bg-surface-muted: #16213a;
+    --color-bg-row-hover: rgba(59, 130, 246, 0.1);
 
     --color-text-primary: var(--slate-50);
     --color-text-secondary: var(--slate-400);

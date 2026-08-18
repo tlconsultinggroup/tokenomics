@@ -21,14 +21,13 @@ export default function MonthlyTab({ data }: MonthlyTabProps) {
         <p className="label" style={{ marginBottom: "var(--spacing-sm)" }}>
           Cost by model
         </p>
-        <div className="card" style={{ padding: "var(--spacing-md)" }}>
-          {modelEntries.length > 0 ? (
+        {modelEntries.length > 0 ? (
+          <div className="card">
             <table>
               <thead>
                 <tr>
                   <th>Model</th>
                   <th>Cost</th>
-                  <th>Tokens</th>
                 </tr>
               </thead>
               <tbody>
@@ -36,23 +35,24 @@ export default function MonthlyTab({ data }: MonthlyTabProps) {
                   <tr key={model}>
                     <td>{model}</td>
                     <td>${cost.toFixed(2)}</td>
-                    <td>{(data.totalTokens / 1000).toFixed(0)}k</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          ) : (
+          </div>
+        ) : (
+          <div className="card" style={{ padding: "var(--spacing-md)" }}>
             <p style={{ margin: 0, color: "var(--color-text-tertiary)" }}>No data</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div style={{ marginTop: "var(--spacing-lg)" }}>
         <p className="label" style={{ marginBottom: "var(--spacing-sm)" }}>
           Cost by provider
         </p>
-        <div className="card" style={{ padding: "var(--spacing-md)" }}>
-          {providerEntries.length > 0 ? (
+        {providerEntries.length > 0 ? (
+          <div className="card">
             <table>
               <thead>
                 <tr>
@@ -69,10 +69,12 @@ export default function MonthlyTab({ data }: MonthlyTabProps) {
                 ))}
               </tbody>
             </table>
-          ) : (
+          </div>
+        ) : (
+          <div className="card" style={{ padding: "var(--spacing-md)" }}>
             <p style={{ margin: 0, color: "var(--color-text-tertiary)" }}>No data</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -22,8 +22,9 @@ impl From<&UnifiedMessage> for Session {
     fn from(msg: &UnifiedMessage) -> Self {
         Self {
             session_id: msg.session_id.clone(),
+            // tokscale-core's UnifiedMessage.timestamp is always milliseconds.
             timestamp: Utc
-                .timestamp_opt(msg.timestamp, 0)
+                .timestamp_millis_opt(msg.timestamp)
                 .single()
                 .unwrap_or_else(Utc::now),
             source: msg.client.clone(),

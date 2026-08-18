@@ -14,8 +14,30 @@ body {
   font-size: var(--font-size-base);
   line-height: 1.5;
   color: var(--color-text-primary);
-  background-color: var(--color-bg-page);
   -webkit-font-smoothing: antialiased;
+}
+
+body {
+  /* Warm near-white canvas with two faint brand-tinted glows and a subtle
+     dot grid, so white cards and panels read as raised above it. */
+  background-color: var(--color-bg-page);
+  background-image:
+    radial-gradient(60% 55% at 100% 0%, rgba(37, 99, 235, 0.05), transparent 60%),
+    radial-gradient(45% 45% at 0% 100%, rgba(37, 99, 235, 0.04), transparent 60%),
+    radial-gradient(circle, rgba(15, 23, 42, 0.035) 1px, transparent 1.5px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-attachment: fixed;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-image:
+      radial-gradient(60% 55% at 100% 0%, rgba(96, 165, 250, 0.06), transparent 60%),
+      radial-gradient(45% 45% at 0% 100%, rgba(96, 165, 250, 0.05), transparent 60%),
+      radial-gradient(circle, rgba(226, 232, 240, 0.035) 1px, transparent 1.5px);
+    background-size: 100% 100%, 100% 100%, 24px 24px;
+  }
 }
 
 #root {
@@ -86,6 +108,10 @@ td {
   border-bottom: 1px solid var(--color-border);
 }
 
+thead {
+  background-color: var(--color-bg-surface-muted);
+}
+
 th {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
@@ -96,6 +122,14 @@ th {
 
 td {
   color: var(--color-text-primary);
+}
+
+tbody tr {
+  transition: background-color 0.1s ease;
+}
+
+tbody tr:hover {
+  background-color: var(--color-bg-row-hover);
 }
 
 /* Buttons */
@@ -149,6 +183,25 @@ textarea:focus {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.card table {
+  margin-bottom: 0;
+}
+
+.card table th:first-child,
+.card table td:first-child {
+  padding-left: var(--spacing-md);
+}
+
+.card table th:last-child,
+.card table td:last-child {
+  padding-right: var(--spacing-md);
+}
+
+.card table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .label {

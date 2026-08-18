@@ -21,8 +21,8 @@ export default function WeeklyTab({ data }: WeeklyTabProps) {
         <p className="label" style={{ marginBottom: "var(--spacing-sm)" }}>
           Cost by model
         </p>
-        <div className="card" style={{ padding: "var(--spacing-md)" }}>
-          {modelEntries.length > 0 ? (
+        {modelEntries.length > 0 ? (
+          <div className="card">
             <table>
               <thead>
                 <tr>
@@ -39,18 +39,20 @@ export default function WeeklyTab({ data }: WeeklyTabProps) {
                 ))}
               </tbody>
             </table>
-          ) : (
+          </div>
+        ) : (
+          <div className="card" style={{ padding: "var(--spacing-md)" }}>
             <p style={{ margin: 0, color: "var(--color-text-tertiary)" }}>No data</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div style={{ marginTop: "var(--spacing-lg)" }}>
         <p className="label" style={{ marginBottom: "var(--spacing-sm)" }}>
           Cost by provider
         </p>
-        <div className="card" style={{ padding: "var(--spacing-md)" }}>
-          {providerEntries.length > 0 ? (
+        {providerEntries.length > 0 ? (
+          <div className="card">
             <table>
               <thead>
                 <tr>
@@ -67,10 +69,12 @@ export default function WeeklyTab({ data }: WeeklyTabProps) {
                 ))}
               </tbody>
             </table>
-          ) : (
+          </div>
+        ) : (
+          <div className="card" style={{ padding: "var(--spacing-md)" }}>
             <p style={{ margin: 0, color: "var(--color-text-tertiary)" }}>No data</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

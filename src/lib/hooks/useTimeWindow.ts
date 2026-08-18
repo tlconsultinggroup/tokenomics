@@ -9,14 +9,14 @@ export function useTimeWindow(period: "daily" | "weekly" | "monthly") {
         return {
           start: new Date(now.getTime() - 5 * 60 * 60 * 1000), // 5 hours ago
           end: now,
-          label: "Last 5 Hours",
+          label: "Last 5 hours",
         };
 
       case "weekly":
         return {
           start: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
           end: now,
-          label: "Last 7 Days",
+          label: "Last 7 days",
         };
 
       case "monthly":
