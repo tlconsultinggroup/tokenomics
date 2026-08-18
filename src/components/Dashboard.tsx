@@ -1,4 +1,5 @@
 import { useDashboardData } from "../lib/hooks/useDashboardData";
+import SummaryCards from "./SummaryCards";
 
 interface DashboardProps {
   period: "daily" | "weekly" | "monthly";
@@ -33,10 +34,7 @@ export default function Dashboard({ period }: DashboardProps) {
 
   return (
     <div>
-      <h2>Period: {data.period}</h2>
-      <p>Total cost: ${data.totalCost.toFixed(2)}</p>
-      <p>Total tokens: {data.totalTokens}</p>
-      <p>Sessions: {data.sessionCount}</p>
+      <SummaryCards data={data} />
     </div>
   );
 }
