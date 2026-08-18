@@ -38,7 +38,10 @@
 
   /* Surface and text roles */
   --color-bg-page: #faf9f8;
-  --color-bg-header: var(--slate-200);
+  /* Header is always dark (matches the footer), independent of light/dark mode. */
+  --color-bg-header: #0f1929;
+  --color-header-text-primary: #f8fafc;
+  --color-header-text-secondary: var(--slate-400);
   --color-bg-surface: #ffffff;
   --color-bg-surface-muted: var(--slate-50);
   --color-bg-row-hover: rgba(23, 143, 99, 0.06);
@@ -96,7 +99,6 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg-page: var(--slate-900);
-    --color-bg-header: #0f1929;
     --color-bg-surface: var(--slate-800);
     --color-bg-surface-muted: #16213a;
     --color-bg-row-hover: rgba(53, 169, 124, 0.12);

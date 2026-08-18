@@ -1,14 +1,16 @@
 import { useState, type CSSProperties } from "react";
 import Dashboard from "./Dashboard";
 import Footer from "./Footer";
+import Logo, { Wordmark } from "./Logo";
 
-const TABS = ["daily", "weekly", "monthly"] as const;
+const TABS = ["daily", "weekly", "monthly", "tools"] as const;
 type Tab = (typeof TABS)[number];
 
 const TAB_LABELS: Record<Tab, string> = {
   daily: "Daily",
   weekly: "Weekly",
   monthly: "Monthly",
+  tools: "Tools & Sources",
 };
 
 const CONTAINER_STYLE: CSSProperties = {
@@ -35,7 +37,7 @@ export default function Layout() {
           top: 0,
           zIndex: 10,
           overflow: "hidden",
-          borderBottom: "1px solid var(--color-border)",
+          borderBottom: "1px solid var(--color-footer-border)",
           background: "var(--color-bg-header)",
           boxShadow: "var(--shadow-sm)",
         }}
@@ -98,29 +100,45 @@ export default function Layout() {
           style={{
             ...CONTAINER_STYLE,
             position: "relative",
-            padding: "var(--spacing-sm) var(--spacing-xl)",
+            padding: "var(--spacing-md) var(--spacing-xl)",
+            display: "flex",
+            alignItems: "center",
+            gap: "14px",
           }}
         >
-          <h1
+          <span
             style={{
-              margin: 0,
-              fontSize: "var(--font-size-lg)",
-              fontWeight: "var(--font-weight-bold)",
-              fontFamily: "'Aharoni', var(--font-family)",
-              color: "var(--brand-600)",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "rgba(255, 255, 255, 0.08)",
+              borderRadius: "var(--radius-md)",
+              padding: "5px",
             }}
           >
-            tokenomics
-          </h1>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "var(--font-size-xs)",
-              color: "var(--color-text-secondary)",
-            }}
-          >
-            Token usage and cost tracking across your AI coding tools
-          </p>
+            <Logo size={30} />
+          </span>
+          <div>
+            <h1
+              style={{
+                margin: 0,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Wordmark size={24} showBadge={true} onDark={true} />
+            </h1>
+            <p
+              style={{
+                margin: "2px 0 0 0",
+                fontSize: "var(--font-size-xs)",
+                color: "var(--color-header-text-secondary)",
+                fontWeight: 500,
+              }}
+            >
+              Token usage and cost tracking across your AI coding tools
+            </p>
+          </div>
         </div>
       </header>
 
