@@ -1,10 +1,4 @@
-mod error;
-mod config;
-mod db;
-mod parsers;
-mod aggregator;
-mod pricing;
-mod commands;
+use tokenomics_tauri::*;
 
 use tauri::Manager;
 

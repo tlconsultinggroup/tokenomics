@@ -3,18 +3,22 @@ name = "tokenomics-tauri"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "tokenomics_tauri"
+path = "src/lib.rs"
+
 [dependencies]
-tauri = { version = "2", features = ["shell-open"] }
+tauri = { version = "2" }
 tauri-plugin-shell = "2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1", features = ["full"] }
-rusqlite = { version = "0.31", features = ["bundled"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
 chrono = "0.4"
-date-fns = "0.1"
 tokscale-core = { path = "../../tokscale/crates/tokscale-core" }
 tracing = "0.1"
 tracing-subscriber = "0.3"
+dirs = "5.0"
 
 [dev-dependencies]
 tempfile = "3.0"
