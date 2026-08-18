@@ -22,7 +22,9 @@
       "csp": null
     }
   },
-  "shell": {
-    "open": true
+  "plugins": {
+    "shell": {
+      "open": true
+    }
   }
 }

@@ -2,6 +2,10 @@ use tokenomics_tauri::*;
 
 use tauri::Manager;
 
+fn main() {
+    run();
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -12,6 +16,9 @@ pub fn run() {
             commands::data::get_monthly_data,
             commands::settings::get_settings,
             commands::settings::update_settings,
+            commands::settings::get_paths,
+            commands::settings::add_custom_path,
+            commands::settings::remove_custom_path,
             commands::scan::trigger_scan,
         ])
         .run(tauri::generate_context!())
