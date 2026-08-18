@@ -3,5 +3,4 @@ pub mod config;
 pub mod db;
 pub mod parsers;
 pub mod aggregator;
-pub mod pricing;
 pub mod commands;
