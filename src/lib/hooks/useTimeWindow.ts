@@ -19,13 +19,14 @@ export function useTimeWindow(period: "daily" | "weekly" | "monthly") {
           label: "Last 7 days",
         };
 
-      case "monthly":
+      case "monthly": {
         const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
         return {
           start: monthStart,
           end: now,
-          label: `${new Date(now).toLocaleString("default", { month: "long", year: "numeric" })}`,
+          label: now.toLocaleString("default", { month: "long", year: "numeric" }),
         };
+      }
     }
   }, [period]);
 }

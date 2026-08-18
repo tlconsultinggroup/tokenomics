@@ -17,6 +17,12 @@ pub struct AggregatedData {
     pub session_count: i64,
     pub cost_by_model: HashMap<String, f64>,
     pub cost_by_provider: HashMap<String, f64>,
+    /// Which provider each model belongs to, so the UI can show provider
+    /// details inline next to a model's cost instead of requiring a
+    /// separate lookup against `cost_by_provider`.
+    pub model_providers: HashMap<String, String>,
+    pub input_tokens_by_model: HashMap<String, i64>,
+    pub output_tokens_by_model: HashMap<String, i64>,
     pub sessions: Vec<Session>,
 }
 
@@ -67,6 +73,9 @@ impl Aggregator {
         let mut filtered_sessions = Vec::new();
         let mut cost_by_model = HashMap::new();
         let mut cost_by_provider = HashMap::new();
+        let mut model_providers = HashMap::new();
+        let mut input_tokens_by_model = HashMap::new();
+        let mut output_tokens_by_model = HashMap::new();
         let mut total_cost = 0.0;
         let mut total_tokens: i64 = 0;
         let mut input_tokens: i64 = 0;
@@ -83,6 +92,18 @@ impl Aggregator {
 
                 // Accumulate costs by provider
                 *cost_by_provider.entry(session.provider.clone()).or_insert(0.0) += session.cost;
+
+                // Record which provider this model belongs to (a model id
+                // maps to exactly one provider in practice).
+                model_providers
+                    .entry(session.model.clone())
+                    .or_insert_with(|| session.provider.clone());
+
+                // Accumulate input/output tokens per model
+                *input_tokens_by_model.entry(session.model.clone()).or_insert(0) +=
+                    session.input_tokens;
+                *output_tokens_by_model.entry(session.model.clone()).or_insert(0) +=
+                    session.output_tokens;
 
                 total_cost += session.cost;
                 total_tokens += session.input_tokens
@@ -117,6 +138,9 @@ impl Aggregator {
             session_count,
             cost_by_model,
             cost_by_provider,
+            model_providers,
+            input_tokens_by_model,
+            output_tokens_by_model,
             sessions: filtered_sessions,
         }
     }
@@ -207,5 +231,44 @@ mod tests {
         let agg = Aggregator::aggregate_daily(&sessions);
         assert_eq!(agg.session_count, 2);
         assert_eq!(agg.total_cost, 10.0);
+    }
+
+    #[test]
+    fn test_aggregate_tracks_model_providers() {
+        let mut s1 = create_test_session("session-1", 2, 5.0);
+        s1.model = "claude-opus".to_string();
+        s1.provider = "anthropic".to_string();
+
+        let mut s2 = create_test_session("session-2", 1, 3.0);
+        s2.model = "gpt-4o".to_string();
+        s2.provider = "openai".to_string();
+
+        let agg = Aggregator::aggregate_daily(&[s1, s2]);
+        assert_eq!(agg.model_providers.get("claude-opus"), Some(&"anthropic".to_string()));
+        assert_eq!(agg.model_providers.get("gpt-4o"), Some(&"openai".to_string()));
+    }
+
+    #[test]
+    fn test_aggregate_tracks_tokens_by_model() {
+        let mut s1 = create_test_session("session-1", 2, 5.0);
+        s1.model = "claude-opus".to_string();
+        s1.input_tokens = 1000;
+        s1.output_tokens = 500;
+
+        let mut s2 = create_test_session("session-2", 1, 3.0);
+        s2.model = "claude-opus".to_string();
+        s2.input_tokens = 200;
+        s2.output_tokens = 100;
+
+        let mut s3 = create_test_session("session-3", 1, 2.0);
+        s3.model = "gpt-4o".to_string();
+        s3.input_tokens = 50;
+        s3.output_tokens = 25;
+
+        let agg = Aggregator::aggregate_daily(&[s1, s2, s3]);
+        assert_eq!(agg.input_tokens_by_model.get("claude-opus"), Some(&1200));
+        assert_eq!(agg.output_tokens_by_model.get("claude-opus"), Some(&600));
+        assert_eq!(agg.input_tokens_by_model.get("gpt-4o"), Some(&50));
+        assert_eq!(agg.output_tokens_by_model.get("gpt-4o"), Some(&25));
     }
 }

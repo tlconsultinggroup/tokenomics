@@ -19,6 +19,9 @@ pub struct DataResponse {
     pub avg_cost_per_session: f64,
     pub cost_by_model: HashMap<String, f64>,
     pub cost_by_provider: HashMap<String, f64>,
+    pub model_providers: HashMap<String, String>,
+    pub input_tokens_by_model: HashMap<String, i64>,
+    pub output_tokens_by_model: HashMap<String, i64>,
 }
 
 #[tauri::command]
@@ -52,6 +55,9 @@ pub async fn get_daily_data() -> Result<DataResponse> {
         avg_cost_per_session,
         cost_by_model: agg.cost_by_model,
         cost_by_provider: agg.cost_by_provider,
+        model_providers: agg.model_providers,
+        input_tokens_by_model: agg.input_tokens_by_model,
+        output_tokens_by_model: agg.output_tokens_by_model,
     })
 }
 
@@ -84,6 +90,9 @@ pub async fn get_weekly_data() -> Result<DataResponse> {
         avg_cost_per_session,
         cost_by_model: agg.cost_by_model,
         cost_by_provider: agg.cost_by_provider,
+        model_providers: agg.model_providers,
+        input_tokens_by_model: agg.input_tokens_by_model,
+        output_tokens_by_model: agg.output_tokens_by_model,
     })
 }
 
@@ -116,5 +125,8 @@ pub async fn get_monthly_data() -> Result<DataResponse> {
         avg_cost_per_session,
         cost_by_model: agg.cost_by_model,
         cost_by_provider: agg.cost_by_provider,
+        model_providers: agg.model_providers,
+        input_tokens_by_model: agg.input_tokens_by_model,
+        output_tokens_by_model: agg.output_tokens_by_model,
     })
 }

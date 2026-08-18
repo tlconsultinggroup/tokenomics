@@ -5,6 +5,14 @@ interface DailyTabProps {
   data: DailyData;
 }
 
+function capitalize(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function formatTokens(count: number) {
+  return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : `${count}`;
+}
+
 export default function DailyTab({ data }: DailyTabProps) {
   const timeWindow = useTimeWindow("daily");
   const modelEntries = Object.entries(data.costByModel);
@@ -21,39 +29,66 @@ export default function DailyTab({ data }: DailyTabProps) {
         <p className="label" style={{ marginBottom: "var(--spacing-sm)" }}>
           Cost by model
         </p>
-        <div className="card" style={{ padding: "var(--spacing-md)" }}>
-          {modelEntries.length > 0 ? (
-            <ul style={{ margin: 0, paddingLeft: "var(--spacing-md)" }}>
-              {modelEntries.map(([model, cost]) => (
-                <li key={model}>
-                  <strong>{model}:</strong> ${cost.toFixed(2)}
-                </li>
-              ))}
-            </ul>
-          ) : (
+        {modelEntries.length > 0 ? (
+          <div className="card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Provider</th>
+                  <th>Tokens in</th>
+                  <th>Tokens out</th>
+                  <th>Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {modelEntries.map(([model, cost]) => (
+                  <tr key={model}>
+                    <td>{model}</td>
+                    <td>{capitalize(data.modelProviders[model] ?? "Unknown")}</td>
+                    <td>{formatTokens(data.inputTokensByModel[model] ?? 0)}</td>
+                    <td>{formatTokens(data.outputTokensByModel[model] ?? 0)}</td>
+                    <td>${cost.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="card" style={{ padding: "var(--spacing-md)" }}>
             <p style={{ margin: 0, color: "var(--color-text-tertiary)" }}>No data</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div style={{ marginTop: "var(--spacing-lg)" }}>
         <p className="label" style={{ marginBottom: "var(--spacing-sm)" }}>
           Cost by provider
         </p>
-        <div className="card" style={{ padding: "var(--spacing-md)" }}>
-          {providerEntries.length > 0 ? (
-            <ul style={{ margin: 0, paddingLeft: "var(--spacing-md)" }}>
-              {providerEntries.map(([provider, cost]) => (
-                <li key={provider}>
-                  <strong>{provider.charAt(0).toUpperCase() + provider.slice(1)}:</strong> $
-                  {cost.toFixed(2)}
-                </li>
-              ))}
-            </ul>
-          ) : (
+        {providerEntries.length > 0 ? (
+          <div className="card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Provider</th>
+                  <th>Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {providerEntries.map(([provider, cost]) => (
+                  <tr key={provider}>
+                    <td>{capitalize(provider)}</td>
+                    <td>${cost.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="card" style={{ padding: "var(--spacing-md)" }}>
             <p style={{ margin: 0, color: "var(--color-text-tertiary)" }}>No data</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

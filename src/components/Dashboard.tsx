@@ -3,7 +3,6 @@ import SummaryCards from "./SummaryCards";
 import DailyTab from "./Tabs/DailyTab";
 import WeeklyTab from "./Tabs/WeeklyTab";
 import MonthlyTab from "./Tabs/MonthlyTab";
-import Recommendations from "./Recommendations";
 
 interface DashboardProps {
   period: "daily" | "weekly" | "monthly";
@@ -46,8 +45,6 @@ export default function Dashboard({ period }: DashboardProps) {
       {period === "daily" && <DailyTab data={data} />}
       {period === "weekly" && <WeeklyTab data={data} />}
       {period === "monthly" && <MonthlyTab data={data} />}
-
-      <Recommendations data={data} />
     </div>
   );
 }

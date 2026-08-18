@@ -1,15 +1,16 @@
 :root {
-  /* Brand accent - single hue, used sparingly for interactive/highlighted elements */
-  --brand-50: #eff6ff;
-  --brand-100: #dbeafe;
-  --brand-200: #bfdbfe;
-  --brand-300: #93c5fd;
-  --brand-400: #60a5fa;
-  --brand-500: #3b82f6;
-  --brand-600: #2563eb;
-  --brand-700: #1d4ed8;
-  --brand-800: #1e40af;
-  --brand-900: #1e3a8a;
+  /* Brand accent - TL Consulting green, matching the ai-advisory sibling
+     project's palette exactly, used for interactive/highlighted elements. */
+  --brand-50: #eafaf3;
+  --brand-100: #cdf0e0;
+  --brand-200: #9de0c2;
+  --brand-300: #66c99f;
+  --brand-400: #35a97c;
+  --brand-500: #178f63;
+  --brand-600: #0f6b4a;
+  --brand-700: #0b5239;
+  --brand-800: #0a4530;
+  --brand-900: #093a29;
 
   /* Neutral scale - slate, used for text, borders, and surfaces */
   --slate-50: #f8fafc;
@@ -30,13 +31,17 @@
   --color-warning-bg: #fffbeb;
   --color-danger: #dc2626;
   --color-danger-bg: #fef2f2;
+  --color-info: #2563eb;
+  --color-info-bg: #eff6ff;
+  --color-accent: #7c3aed;
+  --color-accent-bg: #f5f3ff;
 
   /* Surface and text roles */
   --color-bg-page: #faf9f8;
-  --color-bg-header: var(--slate-100);
+  --color-bg-header: var(--slate-200);
   --color-bg-surface: #ffffff;
   --color-bg-surface-muted: var(--slate-50);
-  --color-bg-row-hover: rgba(59, 130, 246, 0.06);
+  --color-bg-row-hover: rgba(23, 143, 99, 0.06);
 
   --color-text-primary: var(--slate-900);
   --color-text-secondary: var(--slate-500);
@@ -45,6 +50,12 @@
 
   --color-border: var(--slate-200);
   --color-border-strong: var(--slate-300);
+
+  /* Dark footer palette, matched to the app's slate scale */
+  --color-footer-bg: var(--slate-900);
+  --color-footer-border: var(--slate-800);
+  --color-footer-text: var(--slate-300);
+  --color-footer-text-muted: var(--slate-400);
 
   /* Spacing scale */
   --spacing-xs: 4px;
@@ -85,10 +96,10 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg-page: var(--slate-900);
-    --color-bg-header: #16213a;
+    --color-bg-header: #0f1929;
     --color-bg-surface: var(--slate-800);
     --color-bg-surface-muted: #16213a;
-    --color-bg-row-hover: rgba(59, 130, 246, 0.1);
+    --color-bg-row-hover: rgba(53, 169, 124, 0.12);
 
     --color-text-primary: var(--slate-50);
     --color-text-secondary: var(--slate-400);
@@ -100,5 +111,7 @@
     --color-success-bg: rgba(5, 150, 105, 0.12);
     --color-warning-bg: rgba(217, 119, 6, 0.12);
     --color-danger-bg: rgba(220, 38, 38, 0.12);
+    --color-info-bg: rgba(37, 99, 235, 0.12);
+    --color-accent-bg: rgba(124, 58, 237, 0.12);
   }
 }

@@ -5,6 +5,14 @@ interface WeeklyTabProps {
   data: DailyData;
 }
 
+function capitalize(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function formatTokens(count: number) {
+  return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : `${count}`;
+}
+
 export default function WeeklyTab({ data }: WeeklyTabProps) {
   const timeWindow = useTimeWindow("weekly");
   const modelEntries = Object.entries(data.costByModel).sort(([, a], [, b]) => b - a);
@@ -27,6 +35,9 @@ export default function WeeklyTab({ data }: WeeklyTabProps) {
               <thead>
                 <tr>
                   <th>Model</th>
+                  <th>Provider</th>
+                  <th>Tokens in</th>
+                  <th>Tokens out</th>
                   <th>Cost</th>
                 </tr>
               </thead>
@@ -34,6 +45,9 @@ export default function WeeklyTab({ data }: WeeklyTabProps) {
                 {modelEntries.map(([model, cost]) => (
                   <tr key={model}>
                     <td>{model}</td>
+                    <td>{capitalize(data.modelProviders[model] ?? "Unknown")}</td>
+                    <td>{formatTokens(data.inputTokensByModel[model] ?? 0)}</td>
+                    <td>{formatTokens(data.outputTokensByModel[model] ?? 0)}</td>
                     <td>${cost.toFixed(2)}</td>
                   </tr>
                 ))}
@@ -63,7 +77,7 @@ export default function WeeklyTab({ data }: WeeklyTabProps) {
               <tbody>
                 {providerEntries.map(([provider, cost]) => (
                   <tr key={provider}>
-                    <td>{provider.charAt(0).toUpperCase() + provider.slice(1)}</td>
+                    <td>{capitalize(provider)}</td>
                     <td>${cost.toFixed(2)}</td>
                   </tr>
                 ))}
