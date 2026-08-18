@@ -12,7 +12,7 @@ pub struct ScanResult {
 pub async fn trigger_scan() -> Result<ScanResult> {
     // This is a placeholder; in a real implementation, this would:
     // 1. Scan all configured paths
-    // 2. Parse files using tokscale-core
+    // 2. Parse files using tokenomics-core
     // 3. Return summary stats
 
     Ok(ScanResult {

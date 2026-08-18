@@ -12,9 +12,9 @@ pub struct AppSettings {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DataPaths {
-    /// tokscale ClientId strings the user wants scanned, e.g. "claude", "opencode", "cursor", "copilot".
+    /// tokenomics ClientId strings the user wants scanned, e.g. "claude", "opencode", "cursor", "copilot".
     pub enabled_clients: Vec<String>,
-    /// (client_id, extra_directory) pairs for custom scan locations beyond tokscale's defaults.
+    /// (client_id, extra_directory) pairs for custom scan locations beyond tokenomics's defaults.
     pub extra_dirs: Vec<(String, String)>,
 }
 
@@ -30,7 +30,7 @@ impl Default for AppSettings {
 }
 
 impl DataPaths {
-    /// Default to the most common clients; tokscale-core auto-locates their
+    /// Default to the most common clients; tokenomics-core auto-locates their
     /// directories under the user's home directory, so no path detection is
     /// needed here.
     pub fn default_clients() -> Self {

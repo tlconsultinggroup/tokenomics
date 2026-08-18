@@ -1,3 +1,15 @@
+export interface TimeSeriesPoint {
+  label: string;
+  timestamp: string;
+  inputTokens: number;
+  outputTokens: number;
+  cacheReadTokens: number;
+  cacheWriteTokens: number;
+  totalTokens: number;
+  cost: number;
+  sessionCount: number;
+}
+
 export interface DailyData {
   period: "5h-rolling" | "7d" | "1mo";
   totalCost: number;
@@ -13,6 +25,7 @@ export interface DailyData {
   modelProviders: Record<string, string>;
   inputTokensByModel: Record<string, number>;
   outputTokensByModel: Record<string, number>;
+  timeSeries?: TimeSeriesPoint[];
 }
 
 export interface Session {
@@ -32,6 +45,6 @@ export interface AppSettings {
 }
 
 export interface DataPaths {
-  enabledClients: string[]; // tokscale ClientId strings, e.g. "claude", "opencode"
+  enabledClients: string[]; // tokenomics ClientId strings, e.g. "claude", "opencode"
   extraDirs: [string, string][]; // (client_id, path) pairs
 }

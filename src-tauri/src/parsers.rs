@@ -1,14 +1,14 @@
 use crate::error::{AppError, Result};
 use chrono::{DateTime, TimeZone, Utc};
 use serde::{Deserialize, Serialize};
-use tokscale_core::sessions::UnifiedMessage;
-use tokscale_core::{parse_local_unified_messages, scanner::ScannerSettings, LocalParseOptions};
+use tokenomics_core::sessions::UnifiedMessage;
+use tokenomics_core::{parse_local_unified_messages, scanner::ScannerSettings, LocalParseOptions};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Session {
     pub session_id: String,
     pub timestamp: DateTime<Utc>,
-    pub source: String, // "claude", "opencode", "cursor", etc. (tokscale ClientId)
+    pub source: String, // "claude", "opencode", "cursor", etc. (tokenomics ClientId)
     pub model: String,
     pub provider: String, // "anthropic", "openai", "google", etc.
     pub input_tokens: i64,
@@ -22,7 +22,7 @@ impl From<&UnifiedMessage> for Session {
     fn from(msg: &UnifiedMessage) -> Self {
         Self {
             session_id: msg.session_id.clone(),
-            // tokscale-core's UnifiedMessage.timestamp is always milliseconds.
+            // tokenomics-core's UnifiedMessage.timestamp is always milliseconds.
             timestamp: Utc
                 .timestamp_millis_opt(msg.timestamp)
                 .single()
@@ -42,7 +42,7 @@ impl From<&UnifiedMessage> for Session {
 pub struct SessionScanner;
 
 impl SessionScanner {
-    /// `client_ids` are tokscale `ClientId::as_str()` values (e.g. "claude",
+    /// `client_ids` are tokenomics `ClientId::as_str()` values (e.g. "claude",
     /// "opencode", "cursor", "copilot"). `extra_dirs` are (client_id, path)
     /// pairs the user configured as custom scan locations.
     pub async fn scan(client_ids: &[String], extra_dirs: &[(String, String)]) -> Result<Vec<Session>> {
@@ -89,7 +89,7 @@ mod tests {
             "anthropic".to_string(),
             "session-1".to_string(),
             1_700_000_000,
-            tokscale_core::TokenBreakdown {
+            tokenomics_core::TokenBreakdown {
                 input: 1000,
                 output: 500,
                 cache_read: 0,
@@ -118,7 +118,7 @@ mod tests {
             "anthropic".to_string(),
             "session-2".to_string(),
             1_700_000_000,
-            tokscale_core::TokenBreakdown {
+            tokenomics_core::TokenBreakdown {
                 input: 1000,
                 output: 500,
                 cache_read: 200,

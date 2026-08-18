@@ -2,7 +2,7 @@ node_modules/
 dist/
 src-tauri/target/
 src-tauri/gen/
-src-tauri/tokscale-core/target/
+src-tauri/tokenomics-core/target/
 *.swp
 *.swo
 .DS_Store

@@ -4109,6 +4109,32 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
+name = "tokenomics-core"
+version = "4.13.0"
+dependencies = [
+ "bincode",
+ "chrono",
+ "chrono-tz",
+ "dirs 5.0.1",
+ "fs2",
+ "iana-time-zone",
+ "libc",
+ "once_cell",
+ "rayon",
+ "reqwest 0.12.28",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "sha2",
+ "simd-json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "walkdir",
+ "zstd",
+]
+
+[[package]]
 name = "tokenomics-tauri"
 version = "0.1.0"
 dependencies = [
@@ -4121,8 +4147,8 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-shell",
  "tempfile",
+ "tokenomics-core",
  "tokio",
- "tokscale-core",
  "tracing",
  "tracing-subscriber",
 ]
@@ -4176,32 +4202,6 @@ dependencies = [
  "futures-sink",
  "pin-project-lite",
  "tokio",
-]
-
-[[package]]
-name = "tokscale-core"
-version = "4.13.0"
-dependencies = [
- "bincode",
- "chrono",
- "chrono-tz",
- "dirs 5.0.1",
- "fs2",
- "iana-time-zone",
- "libc",
- "once_cell",
- "rayon",
- "reqwest 0.12.28",
- "rusqlite",
- "serde",
- "serde_json",
- "sha2",
- "simd-json",
- "thiserror 2.0.20",
- "tokio",
- "tracing",
- "walkdir",
- "zstd",
 ]
 
 [[package]]
