@@ -68,6 +68,7 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
         padding: "var(--spacing-lg)",
         minWidth: "200px",
         borderTop: `3px solid ${colors.fg}`,
+        background: colors.bg,
       }}
     >
       <div
@@ -89,7 +90,7 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
             width: "32px",
             height: "32px",
             borderRadius: "var(--radius-md)",
-            background: colors.bg,
+            background: "var(--color-bg-surface)",
             color: colors.fg,
           }}
         >
@@ -98,9 +99,9 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
       </div>
       <p
         style={{
-          fontSize: "var(--font-size-2xl)",
+          fontSize: "var(--font-size-xl)",
           fontWeight: "var(--font-weight-bold)",
-          color: "var(--color-text-primary)",
+          color: "var(--brand-800)",
           margin: 0,
           marginBottom: subtext ? "var(--spacing-xs)" : 0,
         }}
