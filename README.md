@@ -9,8 +9,9 @@ Tokenomics scans the local session logs of AI coding tools already installed on 
 - **Daily** tab: rolling 5-hour window
 - **Weekly** tab: rolling 7-day window
 - **Monthly** tab: current calendar month
+- **Tools & Sources** tab: which tools are being scanned and where their data comes from
 
-Each tab shows total cost, total tokens (including cache reads/writes), session count, and a per-model breakdown with provider, tokens in, tokens out, and cost.
+Each period tab shows total cost, total tokens (including cache reads/writes), session count, and a per-model breakdown with provider, tokens in, tokens out, and cost.
 
 By default, Tokenomics scans for:
 
@@ -21,16 +22,31 @@ By default, Tokenomics scans for:
 
 Additional tools can be enabled through the settings panel; the underlying scanner supports a wide range of local AI coding tools beyond the defaults above.
 
-## Development
+## Prerequisites
 
-Requires Node.js and the [Tauri prerequisites](https://tauri.app/start/prerequisites/) for your OS (Rust toolchain, platform build tools).
+Tokenomics is a Tauri app: a Rust backend plus a React frontend, packaged as one native desktop app. Both toolchains need to be installed before the first run.
+
+1. **Node.js** 18 or later. Check with `node --version`.
+2. **Rust toolchain** (stable), via [rustup](https://rustup.rs/). Check with `rustc --version` and `cargo --version`.
+3. **Platform build tools**, required by Tauri to compile the native app shell:
+   - **Windows**: [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) (the "Desktop development with C++" workload) and [WebView2](https://developer.microsoft.com/microsoft-edge/webview2/) (preinstalled on most modern Windows systems).
+   - **macOS**: Xcode Command Line Tools, `xcode-select --install`.
+   - **Linux**: see the [Tauri Linux prerequisites](https://tauri.app/start/prerequisites/#linux) for your distro's package manager (webkit2gtk, build-essential, etc.).
+
+Full details for less common setups: [Tauri prerequisites](https://tauri.app/start/prerequisites/).
+
+## Quick start
+
+Once the prerequisites above are installed, one command builds the backend, starts the frontend, and opens the app showing your real local token usage data:
 
 ```bash
 npm install
 npm run tauri dev
 ```
 
-This compiles and launches the Rust backend, starts the frontend dev server, and opens the desktop app window with hot reload on both sides. Don't use `npm run dev` alone for the full app; that only starts the frontend dev server with no backend behind it.
+The first run takes a minute or two longer since it compiles the Rust side from scratch; later runs are much faster. The app window that opens is the real thing, not a preview, backed by the actual Rust backend and scanning your real local tool history.
+
+Don't use `npm run dev` alone expecting the full app; that only starts the frontend dev server with no backend behind it, so anything that reads token usage data will fail.
 
 ### Other scripts
 
