@@ -1,5 +1,9 @@
 import { useDashboardData } from "../lib/hooks/useDashboardData";
 import SummaryCards from "./SummaryCards";
+import DailyTab from "./Tabs/DailyTab";
+import WeeklyTab from "./Tabs/WeeklyTab";
+import MonthlyTab from "./Tabs/MonthlyTab";
+import Recommendations from "./Recommendations";
 
 interface DashboardProps {
   period: "daily" | "weekly" | "monthly";
@@ -24,6 +28,9 @@ export default function Dashboard({ period }: DashboardProps) {
         <p style={{ color: "var(--color-danger)", margin: 0 }}>
           Could not load usage data: {error.message}
         </p>
+        <p className="text-muted" style={{ fontSize: "var(--font-size-sm)", marginTop: "var(--spacing-sm)", marginBottom: 0 }}>
+          Make sure your configured tool paths are accessible, then try refreshing.
+        </p>
       </div>
     );
   }
@@ -35,6 +42,12 @@ export default function Dashboard({ period }: DashboardProps) {
   return (
     <div>
       <SummaryCards data={data} />
+
+      {period === "daily" && <DailyTab data={data} />}
+      {period === "weekly" && <WeeklyTab data={data} />}
+      {period === "monthly" && <MonthlyTab data={data} />}
+
+      <Recommendations data={data} />
     </div>
   );
 }
