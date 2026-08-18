@@ -1,0 +1,10 @@
+node_modules/
+dist/
+src-tauri/target/
+*.swp
+*.swo
+.DS_Store
+.env.local
+*.db
+*.db-shm
+*.db-wal
