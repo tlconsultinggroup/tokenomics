@@ -11,7 +11,7 @@ export default defineConfig({
   },
   build: {
     target: 'ES2020',
-    minify: 'terser',
+    minify: 'esbuild',
   },
   server: {
     port: 5173,
