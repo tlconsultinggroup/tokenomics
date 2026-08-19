@@ -40,7 +40,13 @@ Download the installer for your platform from [Releases](https://github.com/tlco
 
 Tokenomics is a native app: nothing to install first, no Node/Rust/C++ toolchain needed. It scans local session files only and never sends data anywhere.
 
-> Builds are unsigned. Windows SmartScreen and macOS Gatekeeper will warn on first launch — click "More info → Run anyway" (Windows) or right-click → Open (macOS) once.
+> Builds are unsigned. Windows SmartScreen will warn on first launch — click "More info → Run anyway".
+>
+> On macOS you'll likely see **"Tokenomics is damaged and can't be opened"** instead of the usual Gatekeeper prompt — this is macOS quarantining the unsigned, unnotarized download, not an actual problem with the app. Right-click → Open does not fix this. Instead, after dragging Tokenomics into Applications, run:
+> ```bash
+> xattr -d com.apple.quarantine /Applications/Tokenomics.app
+> ```
+> Then launch it normally. You only need to do this once per install.
 
 ## Building from source
 
