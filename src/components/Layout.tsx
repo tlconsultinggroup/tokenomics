@@ -115,96 +115,34 @@ export default function Layout() {
           </g>
         </svg>
 
-        <div
-          data-tauri-drag-region
-          style={{
-            ...CONTAINER_STYLE,
-            position: "relative",
-            padding: "var(--spacing-md) var(--spacing-xl)",
-            paddingRight: "calc(var(--spacing-xl) + 138px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div data-tauri-drag-region style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "rgba(255, 255, 255, 0.08)",
-                borderRadius: "var(--radius-md)",
-                padding: "5px",
-              }}
-            >
+        <div className="header-container" data-tauri-drag-region>
+          <div className="header-left" data-tauri-drag-region>
+            <span className="header-logo-wrapper">
               <Logo size={40} />
             </span>
-            <div data-tauri-drag-region>
-              <h1
-                data-tauri-drag-region
-                style={{
-                  margin: 0,
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
+            <div className="header-title-block" data-tauri-drag-region>
+              <h1 className="header-title" data-tauri-drag-region>
                 <Wordmark size={34} showBadge={true} onDark={true} />
               </h1>
-              <p
-                data-tauri-drag-region
-                style={{
-                  margin: "2px 0 0 0",
-                  fontSize: "var(--font-size-xs)",
-                  color: "var(--color-header-text-secondary)",
-                  fontWeight: 300,
-                }}
-              >
+              <p className="header-subtitle" data-tauri-drag-region>
                 Local Token Usage &amp; Cost Tracker
               </p>
             </div>
           </div>
 
-          <div data-tauri-drag-region style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div className="header-right" data-tauri-drag-region>
             {username && (
-              <div
-                data-tauri-drag-region
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
-                  borderRadius: "20px",
-                  padding: "4px 12px",
-                  color: "#ffffff",
-                  fontSize: "var(--font-size-xs)",
-                  fontWeight: 500,
-                  backdropFilter: "blur(4px)",
-                }}
-              >
-                <span
-                  style={{
-                    width: "22px",
-                    height: "22px",
-                    borderRadius: "50%",
-                    background: "linear-gradient(135deg, var(--brand-400), var(--brand-600))",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    color: "#ffffff",
-                    textTransform: "uppercase",
-                  }}
-                >
+              <div className="user-badge" data-tauri-drag-region>
+                <span className="user-avatar-circle">
                   {username.charAt(0)}
                 </span>
-                <span>{username}</span>
+                <span className="user-badge-name">{username}</span>
               </div>
             )}
 
-            <ThemeToggle />
+            <div className="theme-toggle-wrapper">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
 
@@ -217,7 +155,7 @@ export default function Layout() {
           background: "var(--color-bg-surface)",
         }}
       >
-        <div style={{ ...CONTAINER_STYLE, display: "flex", gap: "var(--spacing-md)" }}>
+        <div className="nav-container">
           {TABS.map((tab) => {
             const isActive = currentTab === tab;
             return (
