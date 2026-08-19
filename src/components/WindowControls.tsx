@@ -7,11 +7,11 @@ const BTN_STYLE: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  width: "34px",
-  height: "26px",
+  width: "46px",
+  height: "100%",
   background: "transparent",
   border: "none",
-  borderRadius: "var(--radius-sm)",
+  borderRadius: 0,
   color: "rgba(248, 250, 252, 0.75)",
   cursor: "pointer",
   padding: 0,
@@ -31,7 +31,17 @@ export default function WindowControls() {
   }, []);
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "2px", marginLeft: "4px" }}>
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        right: 0,
+        bottom: 0,
+        display: "flex",
+        alignItems: "stretch",
+        zIndex: 20,
+      }}
+    >
       <button
         type="button"
         aria-label="Minimize"

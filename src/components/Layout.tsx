@@ -127,6 +127,7 @@ export default function Layout() {
             ...CONTAINER_STYLE,
             position: "relative",
             padding: "var(--spacing-md) var(--spacing-xl)",
+            paddingRight: "calc(var(--spacing-xl) + 138px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -210,9 +211,10 @@ export default function Layout() {
             )}
 
             <ThemeToggle />
-            <WindowControls />
           </div>
         </div>
+
+        <WindowControls />
       </header>
 
       <nav
