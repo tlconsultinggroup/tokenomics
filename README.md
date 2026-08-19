@@ -22,6 +22,14 @@ By default, Tokenomics scans for:
 
 Additional tools can be enabled through the settings panel; the underlying scanner supports a wide range of local AI coding tools beyond the defaults above.
 
+## Dashboard Look & Feel
+
+### Daily View
+![Tokenomics Daily Dashboard](docs/images/dashboard-daily.png)
+
+### Monthly View
+![Tokenomics Monthly Dashboard](docs/images/dashboard-monthly.png)
+
 ## Prerequisites
 
 Tokenomics is a Tauri app: a Rust backend plus a React frontend, packaged as one native desktop app. Both toolchains need to be installed before the first run.

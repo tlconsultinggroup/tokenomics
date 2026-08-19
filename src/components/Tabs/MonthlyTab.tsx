@@ -1,22 +1,36 @@
 import { DailyData } from "../../lib/types";
 import { useTimeWindow } from "../../lib/hooks/useTimeWindow";
+import { formatToolNames } from "../../lib/supportedTools";
+import MonthlyTrendChart from "../Charts/MonthlyTrendChart";
+import TokenUsageBarChart from "../Charts/TokenUsageBarChart";
+import UsageBreakdownTable, { BreakdownRow } from "../Charts/UsageBreakdownTable";
 
 interface MonthlyTabProps {
   data: DailyData;
 }
 
-function capitalize(text: string) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-function formatTokens(count: number) {
-  return count >= 1000 ? `${(count / 1000).toFixed(1)}k` : `${count}`;
-}
-
 export default function MonthlyTab({ data }: MonthlyTabProps) {
   const timeWindow = useTimeWindow("monthly");
-  const modelEntries = Object.entries(data.costByModel).sort(([, a], [, b]) => b - a);
-  const providerEntries = Object.entries(data.costByProvider).sort(([, a], [, b]) => b - a);
+
+  const modelRows: BreakdownRow[] = Object.entries(data.costByModel)
+    .sort(([, a], [, b]) => b - a)
+    .map(([model, cost]) => ({
+      key: model,
+      label: model,
+      tool: formatToolNames(data.modelTools?.[model]),
+      provider: data.modelProviders[model],
+      inputTokens: data.inputTokensByModel[model] ?? 0,
+      outputTokens: data.outputTokensByModel[model] ?? 0,
+      cost,
+    }));
+
+  const providerRows: BreakdownRow[] = Object.entries(data.costByProvider)
+    .sort(([, a], [, b]) => b - a)
+    .map(([provider, cost]) => ({
+      key: provider,
+      label: provider,
+      cost,
+    }));
 
   return (
     <div style={{ marginBottom: "var(--spacing-xl)" }}>
@@ -25,71 +39,31 @@ export default function MonthlyTab({ data }: MonthlyTabProps) {
         {timeWindow.label}
       </p>
 
-      <div style={{ marginTop: "var(--spacing-lg)" }}>
-        <p className="label" style={{ marginBottom: "var(--spacing-sm)" }}>
-          Cost by model
-        </p>
-        {modelEntries.length > 0 ? (
-          <div className="card">
-            <table>
-              <thead>
-                <tr>
-                  <th>Model</th>
-                  <th>Provider</th>
-                  <th>Tokens in</th>
-                  <th>Tokens out</th>
-                  <th>Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                {modelEntries.map(([model, cost]) => (
-                  <tr key={model}>
-                    <td>{model}</td>
-                    <td>{capitalize(data.modelProviders[model] ?? "Unknown")}</td>
-                    <td>{formatTokens(data.inputTokensByModel[model] ?? 0)}</td>
-                    <td>{formatTokens(data.outputTokensByModel[model] ?? 0)}</td>
-                    <td>${cost.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="card" style={{ padding: "var(--spacing-md)" }}>
-            <p style={{ margin: 0, color: "var(--color-text-tertiary)" }}>No data</p>
-          </div>
-        )}
-      </div>
+      {/* Monthly Trend Area/Line Chart */}
+      {data.timeSeries && data.timeSeries.length > 0 && (
+        <MonthlyTrendChart timeSeries={data.timeSeries} />
+      )}
 
-      <div style={{ marginTop: "var(--spacing-lg)" }}>
-        <p className="label" style={{ marginBottom: "var(--spacing-sm)" }}>
-          Cost by provider
-        </p>
-        {providerEntries.length > 0 ? (
-          <div className="card">
-            <table>
-              <thead>
-                <tr>
-                  <th>Provider</th>
-                  <th>Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                {providerEntries.map(([provider, cost]) => (
-                  <tr key={provider}>
-                    <td>{capitalize(provider)}</td>
-                    <td>${cost.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="card" style={{ padding: "var(--spacing-md)" }}>
-            <p style={{ margin: 0, color: "var(--color-text-tertiary)" }}>No data</p>
-          </div>
-        )}
-      </div>
+      {/* Daily Token Volume Stacked Bar Graph */}
+      {data.timeSeries && data.timeSeries.length > 0 && (
+        <TokenUsageBarChart timeSeries={data.timeSeries} title="Daily Token Volume over the Month" />
+      )}
+
+      {/* Model Breakdown Table with Horizontal Usage Bars */}
+      <UsageBreakdownTable
+        title="Cost & Token Breakdown by Model"
+        rows={modelRows}
+        totalCost={data.totalCost}
+        showTokens={true}
+      />
+
+      {/* Provider Breakdown Table with Horizontal Usage Bars */}
+      <UsageBreakdownTable
+        title="Cost Breakdown by Provider"
+        rows={providerRows}
+        totalCost={data.totalCost}
+        showTokens={false}
+      />
     </div>
   );
 }

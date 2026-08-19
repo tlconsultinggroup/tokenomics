@@ -3,13 +3,16 @@ import SummaryCards from "./SummaryCards";
 import DailyTab from "./Tabs/DailyTab";
 import WeeklyTab from "./Tabs/WeeklyTab";
 import MonthlyTab from "./Tabs/MonthlyTab";
+import ToolsTab from "./Tabs/ToolsTab";
 
 interface DashboardProps {
-  period: "daily" | "weekly" | "monthly";
+  period: "daily" | "weekly" | "monthly" | "tools";
 }
 
 export default function Dashboard({ period }: DashboardProps) {
-  const { data, isLoading, error } = useDashboardData(period);
+  // If period is "tools", query monthly data to pass to ToolsTab for aggregate stats
+  const queryPeriod = period === "tools" ? "monthly" : period;
+  const { data, isLoading, error } = useDashboardData(queryPeriod);
 
   if (isLoading) {
     return <p className="text-muted">Loading dashboard data...</p>;
@@ -40,11 +43,12 @@ export default function Dashboard({ period }: DashboardProps) {
 
   return (
     <div>
-      <SummaryCards data={data} />
+      {period !== "tools" && <SummaryCards data={data} />}
 
       {period === "daily" && <DailyTab data={data} />}
       {period === "weekly" && <WeeklyTab data={data} />}
       {period === "monthly" && <MonthlyTab data={data} />}
+      {period === "tools" && <ToolsTab monthlyData={data} />}
     </div>
   );
 }

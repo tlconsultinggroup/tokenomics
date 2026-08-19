@@ -15,6 +15,7 @@ pub fn run() {
             commands::data::get_weekly_data,
             commands::data::get_monthly_data,
             commands::settings::get_settings,
+            commands::settings::get_system_user,
             commands::settings::update_settings,
             commands::settings::get_paths,
             commands::settings::add_custom_path,

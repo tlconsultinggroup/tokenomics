@@ -14,6 +14,10 @@ async function invokeCommand<T>(cmd: string, args?: Record<string, unknown>): Pr
 }
 
 export const api = {
+  system: {
+    getUser: () => invokeCommand<{ username: string }>("get_system_user"),
+  },
+
   data: {
     getDaily: () => invokeCommand<DailyData>("get_daily_data"),
     getWeekly: () => invokeCommand<DailyData>("get_weekly_data"),

@@ -1,4 +1,4 @@
-use crate::aggregator::Aggregator;
+use crate::aggregator::{Aggregator, TimeSeriesPoint};
 use crate::error::Result;
 use crate::parsers::SessionScanner;
 use crate::config::AppSettings;
@@ -20,8 +20,10 @@ pub struct DataResponse {
     pub cost_by_model: HashMap<String, f64>,
     pub cost_by_provider: HashMap<String, f64>,
     pub model_providers: HashMap<String, String>,
+    pub model_tools: HashMap<String, Vec<String>>,
     pub input_tokens_by_model: HashMap<String, i64>,
     pub output_tokens_by_model: HashMap<String, i64>,
+    pub time_series: Vec<TimeSeriesPoint>,
 }
 
 #[tauri::command]
@@ -56,8 +58,10 @@ pub async fn get_daily_data() -> Result<DataResponse> {
         cost_by_model: agg.cost_by_model,
         cost_by_provider: agg.cost_by_provider,
         model_providers: agg.model_providers,
+        model_tools: agg.model_tools,
         input_tokens_by_model: agg.input_tokens_by_model,
         output_tokens_by_model: agg.output_tokens_by_model,
+        time_series: agg.time_series,
     })
 }
 
@@ -91,8 +95,10 @@ pub async fn get_weekly_data() -> Result<DataResponse> {
         cost_by_model: agg.cost_by_model,
         cost_by_provider: agg.cost_by_provider,
         model_providers: agg.model_providers,
+        model_tools: agg.model_tools,
         input_tokens_by_model: agg.input_tokens_by_model,
         output_tokens_by_model: agg.output_tokens_by_model,
+        time_series: agg.time_series,
     })
 }
 
@@ -126,7 +132,9 @@ pub async fn get_monthly_data() -> Result<DataResponse> {
         cost_by_model: agg.cost_by_model,
         cost_by_provider: agg.cost_by_provider,
         model_providers: agg.model_providers,
+        model_tools: agg.model_tools,
         input_tokens_by_model: agg.input_tokens_by_model,
         output_tokens_by_model: agg.output_tokens_by_model,
+        time_series: agg.time_series,
     })
 }

@@ -65,8 +65,8 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
     <div
       className="card"
       style={{
-        padding: "var(--spacing-lg)",
-        minWidth: "200px",
+        padding: "var(--spacing-md) var(--spacing-lg)",
+        minWidth: "180px",
         borderTop: `3px solid ${colors.fg}`,
         background: colors.bg,
       }}
@@ -76,10 +76,10 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: "var(--spacing-md)",
+          marginBottom: "var(--spacing-sm)",
         }}
       >
-        <p className="label" style={{ margin: 0 }}>
+        <p className="label" style={{ margin: 0, fontSize: "var(--font-size-xs)" }}>
           {label}
         </p>
         <span
@@ -87,8 +87,8 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "32px",
-            height: "32px",
+            width: "28px",
+            height: "28px",
             borderRadius: "var(--radius-md)",
             background: "var(--color-bg-surface)",
             color: colors.fg,
@@ -99,11 +99,11 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
       </div>
       <p
         style={{
-          fontSize: "var(--font-size-xl)",
+          fontSize: "var(--font-size-lg)",
           fontWeight: "var(--font-weight-bold)",
           color: "var(--brand-800)",
           margin: 0,
-          marginBottom: subtext ? "var(--spacing-xs)" : 0,
+          marginBottom: subtext ? "2px" : 0,
         }}
       >
         {value}
@@ -111,7 +111,7 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
       {subtext && (
         <p
           style={{
-            fontSize: "var(--font-size-sm)",
+            fontSize: "var(--font-size-xs)",
             color: "var(--color-text-secondary)",
             margin: 0,
           }}
@@ -137,45 +137,72 @@ export default function SummaryCards({ data }: SummaryCardsProps) {
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-        gap: "var(--spacing-lg)",
+        position: "relative",
         marginBottom: "var(--spacing-xl)",
+        padding: "var(--spacing-sm) 0",
       }}
     >
-      <Card
-        label="Total cost"
-        value={`$${data.totalCost.toFixed(2)}`}
-        subtext="USD"
-        tone="brand"
-        icon={<DollarIcon />}
+      {/* Expansive, Soft Faded Hero Background Graphic blending seamlessly into the page */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-60px",
+          left: "-80px",
+          right: "-80px",
+          bottom: "-60px",
+          backgroundImage: "url(/dashboard-hero.svg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.12,
+          pointerEvents: "none",
+          maskImage: "radial-gradient(ellipse 70% 65% at 50% 50%, black 20%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 70% 65% at 50% 50%, black 20%, transparent 100%)",
+        }}
       />
-      <Card
-        label="Total tokens"
-        value={`${(data.totalTokens / 1000).toFixed(0)}k`}
-        subtext={
-          `In ${(data.inputTokens / 1000).toFixed(1)}k, out ${(data.outputTokens / 1000).toFixed(1)}k` +
-          (data.cacheReadTokens + data.cacheWriteTokens > 0
-            ? `, cache ${((data.cacheReadTokens + data.cacheWriteTokens) / 1000).toFixed(1)}k`
-            : "")
-        }
-        tone="info"
-        icon={<LayersIcon />}
-      />
-      <Card
-        label="Avg cost / session"
-        value={`$${data.avgCostPerSession.toFixed(2)}`}
-        subtext={data.sessionCount > 0 ? `${data.sessionCount} sessions` : "No sessions"}
-        tone="warning"
-        icon={<TrendIcon />}
-      />
-      <Card
-        label="Sessions"
-        value={data.sessionCount}
-        subtext={PERIOD_LABELS[data.period]}
-        tone="accent"
-        icon={<ListIcon />}
-      />
+
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "var(--spacing-md)",
+        }}
+      >
+        <Card
+          label="Total cost"
+          value={`$${data.totalCost.toFixed(2)}`}
+          subtext="USD"
+          tone="brand"
+          icon={<DollarIcon />}
+        />
+        <Card
+          label="Total tokens"
+          value={`${(data.totalTokens / 1000).toFixed(0)}k`}
+          subtext={
+            `In ${(data.inputTokens / 1000).toFixed(1)}k, out ${(data.outputTokens / 1000).toFixed(1)}k` +
+            (data.cacheReadTokens + data.cacheWriteTokens > 0
+              ? `, cache ${((data.cacheReadTokens + data.cacheWriteTokens) / 1000).toFixed(1)}k`
+              : "")
+          }
+          tone="info"
+          icon={<LayersIcon />}
+        />
+        <Card
+          label="Avg cost / session"
+          value={`$${data.avgCostPerSession.toFixed(2)}`}
+          subtext={data.sessionCount > 0 ? `${data.sessionCount} sessions` : "No sessions"}
+          tone="warning"
+          icon={<TrendIcon />}
+        />
+        <Card
+          label="Sessions"
+          value={data.sessionCount}
+          subtext={PERIOD_LABELS[data.period]}
+          tone="accent"
+          icon={<ListIcon />}
+        />
+      </div>
     </div>
   );
 }

@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="hero-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1329"/>
+      <stop offset="40%" stop-color="#0f172a"/>
+      <stop offset="80%" stop-color="#111c38"/>
+      <stop offset="100%" stop-color="#0a1222"/>
+    </linearGradient>
+
+    <radialGradient id="glow-emerald" cx="20%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#178f63" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#178f63" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="glow-violet" cx="80%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="glow-blue" cx="50%" cy="70%" r="45%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Token Stream & Trend Gradients -->
+    <linearGradient id="stream-emerald" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#35a97c" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#66c99f" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="stream-violet" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#a855f7" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#c084fc" stop-opacity="0.1"/>
+    </linearGradient>
+
+    <linearGradient id="bar-emerald" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#0f6b4a"/>
+      <stop offset="100%" stop-color="#35a97c"/>
+    </linearGradient>
+
+    <linearGradient id="bar-violet" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#5b21b6"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+
+    <linearGradient id="bar-blue" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+
+    <!-- Pattern for Grid -->
+    <pattern id="hero-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="0.75" stroke-opacity="0.25"/>
+      <circle cx="40" cy="40" r="1" fill="#475569" fill-opacity="0.3"/>
+    </pattern>
+
+    <!-- Glow Filter -->
+    <filter id="soft-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1200" height="280" fill="url(#hero-bg)" rx="16"/>
+  <rect width="1200" height="280" fill="url(#hero-grid)" rx="16"/>
+
+  <!-- Ambient Light Orbs -->
+  <rect width="1200" height="280" fill="url(#glow-emerald)" rx="16"/>
+  <rect width="1200" height="280" fill="url(#glow-violet)" rx="16"/>
+  <rect width="1200" height="280" fill="url(#glow-blue)" rx="16"/>
+
+  <!-- Ambient Perspective Tech Curves / Waves -->
+  <g opacity="0.65">
+    <path d="M -50 200 C 150 140, 350 240, 600 180 S 950 120, 1250 160" fill="none" stroke="url(#stream-emerald)" stroke-width="2.5" filter="url(#soft-glow)"/>
+    <path d="M -50 150 C 200 220, 400 120, 700 190 S 1000 230, 1250 130" fill="none" stroke="url(#stream-violet)" stroke-width="2" filter="url(#soft-glow)"/>
+    <path d="M -50 240 C 250 200, 500 260, 750 150 S 1050 100, 1250 210" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-opacity="0.4" stroke-dasharray="4 8"/>
+  </g>
+
+  <!-- Neural Token Nodes & Network Connections (Left-Center Floating Mesh) -->
+  <g opacity="0.85">
+    <!-- Lines -->
+    <line x1="120" y1="90" x2="220" y2="140" stroke="#334155" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <line x1="220" y1="140" x2="340" y2="90" stroke="#35a97c" stroke-width="1.5" stroke-opacity="0.6"/>
+    <line x1="220" y1="140" x2="280" y2="210" stroke="#7c3aed" stroke-width="1.5" stroke-opacity="0.6"/>
+    <line x1="340" y1="90" x2="460" y2="160" stroke="#334155" stroke-width="1.2"/>
+    <line x1="280" y1="210" x2="420" y2="210" stroke="#35a97c" stroke-width="1.2" stroke-dasharray="2 4"/>
+
+    <!-- Floating Node Badges -->
+    <g transform="translate(100, 70)">
+      <rect width="80" height="28" rx="14" fill="#0f172a" stroke="#35a97c" stroke-width="1.2" opacity="0.9"/>
+      <circle cx="16" cy="14" r="4" fill="#10b981"/>
+      <text x="28" y="18" fill="#e2e8f0" font-size="10" font-family="sans-serif" font-weight="600">Claude</text>
+    </g>
+
+    <g transform="translate(300, 70)">
+      <rect width="85" height="28" rx="14" fill="#0f172a" stroke="#7c3aed" stroke-width="1.2" opacity="0.9"/>
+      <circle cx="16" cy="14" r="4" fill="#a855f7"/>
+      <text x="28" y="18" fill="#e2e8f0" font-size="10" font-family="sans-serif" font-weight="600">Copilot</text>
+    </g>
+
+    <g transform="translate(180, 125)">
+      <rect width="90" height="30" rx="15" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" opacity="0.95"/>
+      <circle cx="18" cy="15" r="5" fill="#3b82f6"/>
+      <text x="30" y="19" fill="#ffffff" font-size="11" font-family="sans-serif" font-weight="700">OpenCode</text>
+    </g>
+
+    <g transform="translate(240, 195)">
+      <rect width="80" height="28" rx="14" fill="#0f172a" stroke="#10b981" stroke-width="1.2" opacity="0.9"/>
+      <circle cx="16" cy="14" r="4" fill="#35a97c"/>
+      <text x="28" y="18" fill="#e2e8f0" font-size="10" font-family="sans-serif" font-weight="600">Cursor</text>
+    </g>
+  </g>
+
+  <!-- Right Side Analytics Visuals: Isometric Token Blocks & Bar Graph -->
+  <g transform="translate(820, 45)">
+    <!-- Card Container Frame -->
+    <rect width="320" height="190" rx="12" fill="#0f172a" fill-opacity="0.75" stroke="#334155" stroke-width="1"/>
+
+    <!-- Inner Title -->
+    <text x="20" y="30" fill="#94a3b8" font-size="11" font-family="sans-serif" font-weight="600" letter-spacing="0.05em">REAL-TIME TOKEN VOLUME</text>
+
+    <!-- Bars -->
+    <g transform="translate(25, 150)">
+      <!-- Bar 1 -->
+      <rect x="0" y="-45" width="22" height="45" rx="4" fill="url(#bar-emerald)"/>
+      <text x="11" y="15" fill="#64748b" font-size="9" font-family="sans-serif" text-anchor="middle">Mon</text>
+
+      <!-- Bar 2 -->
+      <rect x="35" y="-75" width="22" height="75" rx="4" fill="url(#bar-violet)"/>
+      <text x="46" y="15" fill="#64748b" font-size="9" font-family="sans-serif" text-anchor="middle">Tue</text>
+
+      <!-- Bar 3 -->
+      <rect x="70" y="-55" width="22" height="55" rx="4" fill="url(#bar-blue)"/>
+      <text x="81" y="15" fill="#64748b" font-size="9" font-family="sans-serif" text-anchor="middle">Wed</text>
+
+      <!-- Bar 4 -->
+      <rect x="105" y="-105" width="22" height="105" rx="4" fill="url(#bar-emerald)"/>
+      <text x="116" y="15" fill="#64748b" font-size="9" font-family="sans-serif" text-anchor="middle">Thu</text>
+
+      <!-- Bar 5 -->
+      <rect x="140" y="-85" width="22" height="85" rx="4" fill="url(#bar-violet)"/>
+      <text x="151" y="15" fill="#64748b" font-size="9" font-family="sans-serif" text-anchor="middle">Fri</text>
+
+      <!-- Bar 6 -->
+      <rect x="175" y="-60" width="22" height="60" rx="4" fill="url(#bar-blue)"/>
+      <text x="186" y="15" fill="#64748b" font-size="9" font-family="sans-serif" text-anchor="middle">Sat</text>
+
+      <!-- Bar 7 -->
+      <rect x="210" y="-120" width="22" height="120" rx="4" fill="url(#bar-emerald)" stroke="#66c99f" stroke-width="1"/>
+      <text x="221" y="15" fill="#35a97c" font-size="9" font-family="sans-serif" font-weight="700" text-anchor="middle">Today</text>
+    </g>
+
+    <!-- Floating Value Pill -->
+    <g transform="translate(200, 20)">
+      <rect width="100" height="26" rx="6" fill="#178f63" fill-opacity="0.2" stroke="#35a97c" stroke-width="1"/>
+      <text x="50" y="17" fill="#66c99f" font-size="11" font-family="sans-serif" font-weight="700" text-anchor="middle">+24.8% Tokens</text>
+    </g>
+  </g>
+
+  <!-- Center Decorative AI Token Stack / Diamond Core -->
+  <g transform="translate(560, 110)">
+    <!-- Layered Concentric Glowing Circles -->
+    <circle cx="40" cy="30" r="60" fill="#178f63" fill-opacity="0.08"/>
+    <circle cx="40" cy="30" r="42" fill="#7c3aed" fill-opacity="0.12"/>
+    <circle cx="40" cy="30" r="28" fill="#0f172a" stroke="#35a97c" stroke-width="1.5"/>
+
+    <!-- Token Coin Stack Icon -->
+    <path d="M 28 20 C 28 16, 52 16, 52 20 C 52 24, 28 24, 28 20 Z" fill="none" stroke="#66c99f" stroke-width="1.5"/>
+    <path d="M 28 20 L 28 32 C 28 36, 52 36, 52 32 L 52 20" fill="none" stroke="#35a97c" stroke-width="1.5"/>
+    <path d="M 28 26 C 28 30, 52 30, 52 26" fill="none" stroke="#a855f7" stroke-width="1.5"/>
+    <path d="M 28 32 C 28 40, 52 40, 52 32" fill="none" stroke="#66c99f" stroke-width="1.5"/>
+
+    <!-- Spark Dot -->
+    <circle cx="58" cy="14" r="3" fill="#a855f7" filter="url(#soft-glow)"/>
+    <circle cx="58" cy="14" r="1.5" fill="#ffffff"/>
+  </g>
+
+  <!-- Bottom Accent Line -->
+  <rect x="0" y="276" width="1200" height="4" fill="url(#stream-emerald)"/>
+</svg>

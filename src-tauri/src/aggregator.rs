@@ -4,6 +4,21 @@ use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TimeSeriesPoint {
+    pub label: String,
+    pub timestamp: String,
+    pub input_tokens: i64,
+    pub output_tokens: i64,
+    pub cache_read_tokens: i64,
+    pub cache_write_tokens: i64,
+    pub total_tokens: i64,
+    pub cost: f64,
+    pub session_count: i64,
+    pub in_window: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AggregatedData {
     pub period: String, // "5h-rolling", "7d", "1mo"
     pub start_time: DateTime<Utc>,
@@ -21,8 +36,10 @@ pub struct AggregatedData {
     /// details inline next to a model's cost instead of requiring a
     /// separate lookup against `cost_by_provider`.
     pub model_providers: HashMap<String, String>,
+    pub model_tools: HashMap<String, Vec<String>>,
     pub input_tokens_by_model: HashMap<String, i64>,
     pub output_tokens_by_model: HashMap<String, i64>,
+    pub time_series: Vec<TimeSeriesPoint>,
     pub sessions: Vec<Session>,
 }
 
@@ -74,6 +91,7 @@ impl Aggregator {
         let mut cost_by_model = HashMap::new();
         let mut cost_by_provider = HashMap::new();
         let mut model_providers = HashMap::new();
+        let mut model_tools_map: HashMap<String, HashSet<String>> = HashMap::new();
         let mut input_tokens_by_model = HashMap::new();
         let mut output_tokens_by_model = HashMap::new();
         let mut total_cost = 0.0;
@@ -98,6 +116,12 @@ impl Aggregator {
                 model_providers
                     .entry(session.model.clone())
                     .or_insert_with(|| session.provider.clone());
+
+                // Record which tools/sources consumed this model
+                model_tools_map
+                    .entry(session.model.clone())
+                    .or_default()
+                    .insert(session.source.clone());
 
                 // Accumulate input/output tokens per model
                 *input_tokens_by_model.entry(session.model.clone()).or_insert(0) +=
@@ -125,6 +149,95 @@ impl Aggregator {
             .collect::<HashSet<&str>>()
             .len() as i64;
 
+        // Build time series buckets according to period
+        let mut time_buckets: Vec<(DateTime<Utc>, DateTime<Utc>, String, bool)> = Vec::new();
+        if period == "5h-rolling" {
+            let local_now = Local::now();
+            let current_hour_start = local_now
+                .with_minute(0)
+                .unwrap()
+                .with_second(0)
+                .unwrap();
+
+            // 12 1-hour buckets covering the last 12 hours up to current hour
+            let start_12h = current_hour_start - Duration::hours(11);
+            let hour_step = Duration::hours(1);
+
+            for i in 0..12 {
+                let b_start = (start_12h + Duration::hours(i)).to_utc();
+                let b_end = b_start + hour_step;
+                let label = b_start.with_timezone(&Local).format("%H:00").to_string();
+                let in_window = b_end > start && b_start < end;
+                time_buckets.push((b_start, b_end, label, in_window));
+            }
+        } else if period == "7d" {
+            let day_step = Duration::days(1);
+            let mut b_start = start;
+            for _ in 0..7 {
+                let b_end = (b_start + day_step).min(end);
+                let label = b_start.with_timezone(&Local).format("%a %b %d").to_string();
+                time_buckets.push((b_start, b_end, label, true));
+                b_start = b_start + day_step;
+                if b_start >= end {
+                    break;
+                }
+            }
+        } else {
+            // "1mo" or default
+            let day_step = Duration::days(1);
+            let mut b_start = start;
+            while b_start < end {
+                let b_end = (b_start + day_step).min(end);
+                let label = b_start.with_timezone(&Local).format("%b %d").to_string();
+                time_buckets.push((b_start, b_end, label, true));
+                b_start = b_start + day_step;
+            }
+        }
+
+        let mut time_series = Vec::new();
+        for (b_start, b_end, label, in_window) in time_buckets {
+            let mut b_input = 0;
+            let mut b_output = 0;
+            let mut b_cache_read = 0;
+            let mut b_cache_write = 0;
+            let mut b_cost = 0.0;
+            let mut b_sessions = HashSet::new();
+
+            for session in sessions {
+                if session.timestamp >= b_start && session.timestamp < b_end {
+                    b_input += session.input_tokens;
+                    b_output += session.output_tokens;
+                    b_cache_read += session.cache_read_tokens;
+                    b_cache_write += session.cache_write_tokens;
+                    b_cost += session.cost;
+                    b_sessions.insert(session.session_id.as_str());
+                }
+            }
+
+            let b_total = b_input + b_output + b_cache_read + b_cache_write;
+            time_series.push(TimeSeriesPoint {
+                label,
+                timestamp: b_start.to_rfc3339(),
+                input_tokens: b_input,
+                output_tokens: b_output,
+                cache_read_tokens: b_cache_read,
+                cache_write_tokens: b_cache_write,
+                total_tokens: b_total,
+                cost: b_cost,
+                session_count: b_sessions.len() as i64,
+                in_window,
+            });
+        }
+
+        let model_tools: HashMap<String, Vec<String>> = model_tools_map
+            .into_iter()
+            .map(|(m, tools)| {
+                let mut list: Vec<String> = tools.into_iter().collect();
+                list.sort();
+                (m, list)
+            })
+            .collect();
+
         AggregatedData {
             period: period.to_string(),
             start_time: start,
@@ -139,8 +252,10 @@ impl Aggregator {
             cost_by_model,
             cost_by_provider,
             model_providers,
+            model_tools,
             input_tokens_by_model,
             output_tokens_by_model,
+            time_series,
             sessions: filtered_sessions,
         }
     }

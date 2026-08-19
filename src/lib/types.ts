@@ -8,6 +8,7 @@ export interface TimeSeriesPoint {
   totalTokens: number;
   cost: number;
   sessionCount: number;
+  inWindow?: boolean;
 }
 
 export interface DailyData {
@@ -23,6 +24,7 @@ export interface DailyData {
   costByModel: Record<string, number>;
   costByProvider: Record<string, number>;
   modelProviders: Record<string, string>;
+  modelTools?: Record<string, string[]>;
   inputTokensByModel: Record<string, number>;
   outputTokensByModel: Record<string, number>;
   timeSeries?: TimeSeriesPoint[];

@@ -1,7 +1,8 @@
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Dashboard from "./Dashboard";
 import Footer from "./Footer";
 import Logo, { Wordmark } from "./Logo";
+import { api } from "../lib/api";
 
 const TABS = ["daily", "weekly", "monthly", "tools"] as const;
 type Tab = (typeof TABS)[number];
@@ -22,6 +23,14 @@ const CONTAINER_STYLE: CSSProperties = {
 
 export default function Layout() {
   const [currentTab, setCurrentTab] = useState<Tab>("daily");
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    api.system
+      .getUser()
+      .then((res) => setUsername(res.username))
+      .catch(() => setUsername(null));
+  }, []);
 
   return (
     <div
@@ -103,42 +112,81 @@ export default function Layout() {
             padding: "var(--spacing-md) var(--spacing-xl)",
             display: "flex",
             alignItems: "center",
-            gap: "14px",
+            justifyContent: "space-between",
           }}
         >
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "rgba(255, 255, 255, 0.08)",
-              borderRadius: "var(--radius-md)",
-              padding: "5px",
-            }}
-          >
-            <Logo size={30} />
-          </span>
-          <div>
-            <h1
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <span
               style={{
-                margin: 0,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "rgba(255, 255, 255, 0.08)",
+                borderRadius: "var(--radius-md)",
+                padding: "5px",
+              }}
+            >
+              <Logo size={30} />
+            </span>
+            <div>
+              <h1
+                style={{
+                  margin: 0,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Wordmark size={24} showBadge={true} onDark={true} />
+              </h1>
+              <p
+                style={{
+                  margin: "2px 0 0 0",
+                  fontSize: "var(--font-size-xs)",
+                  color: "var(--color-header-text-secondary)",
+                  fontWeight: 500,
+                }}
+              >
+                Token usage and cost tracking across your AI coding tools
+              </p>
+            </div>
+          </div>
+
+          {username && (
+            <div
+              style={{
                 display: "flex",
                 alignItems: "center",
-              }}
-            >
-              <Wordmark size={24} showBadge={true} onDark={true} />
-            </h1>
-            <p
-              style={{
-                margin: "2px 0 0 0",
+                gap: "8px",
+                background: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
+                borderRadius: "20px",
+                padding: "4px 12px",
+                color: "#ffffff",
                 fontSize: "var(--font-size-xs)",
-                color: "var(--color-header-text-secondary)",
                 fontWeight: 500,
+                backdropFilter: "blur(4px)",
               }}
             >
-              Token usage and cost tracking across your AI coding tools
-            </p>
-          </div>
+              <span
+                style={{
+                  width: "22px",
+                  height: "22px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, var(--brand-400), var(--brand-600))",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  color: "#ffffff",
+                  textTransform: "uppercase",
+                }}
+              >
+                {username.charAt(0)}
+              </span>
+              <span>{username}</span>
+            </div>
+          )}
         </div>
       </header>
 

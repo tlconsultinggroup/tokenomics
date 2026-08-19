@@ -13,9 +13,29 @@ pub struct SettingsResponse {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct UserInfoResponse {
+    pub username: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PathsResponse {
     pub enabled_clients: Vec<String>,
     pub extra_dirs: Vec<(String, String)>,
+}
+
+#[tauri::command]
+pub async fn get_system_user() -> Result<UserInfoResponse> {
+    let username = std::env::var("USERNAME")
+        .or_else(|_| std::env::var("USER"))
+        .or_else(|_| std::env::var("LOGNAME"))
+        .unwrap_or_else(|_| {
+            dirs::home_dir()
+                .and_then(|p| p.file_name().map(|s| s.to_string_lossy().to_string()))
+                .unwrap_or_else(|| "User".to_string())
+        });
+
+    Ok(UserInfoResponse { username })
 }
 
 #[tauri::command]
