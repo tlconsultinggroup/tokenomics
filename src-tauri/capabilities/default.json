@@ -12,6 +12,7 @@
     "core:window:allow-toggle-maximize",
     "core:window:allow-is-maximized",
     "core:window:allow-start-dragging",
+    "core:window:allow-set-icon",
     "shell:allow-open",
     "updater:default",
     "process:allow-restart"

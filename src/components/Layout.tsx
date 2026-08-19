@@ -138,7 +138,7 @@ export default function Layout() {
                 padding: "5px",
               }}
             >
-              <Logo size={30} />
+              <Logo size={40} />
             </span>
             <div data-tauri-drag-region>
               <h1
@@ -149,7 +149,7 @@ export default function Layout() {
                   alignItems: "center",
                 }}
               >
-                <Wordmark size={30} showBadge={true} onDark={true} />
+                <Wordmark size={34} showBadge={true} onDark={true} />
               </h1>
               <p
                 data-tauri-drag-region

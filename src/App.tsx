@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Layout from "./components/Layout";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PageBackground from "./components/PageBackground";
+import TaskbarIconStatus from "./components/TaskbarIconStatus";
 import { useTheme, applyThemeToDocument } from "./lib/hooks/useTheme";
 import { useUpdaterStore } from "./lib/hooks/useUpdater";
 
@@ -33,6 +34,7 @@ export default function App() {
     <ErrorBoundary>
       {!reduceMotion && <PageBackground />}
       <QueryClientProvider client={queryClient}>
+        <TaskbarIconStatus />
         <Layout />
       </QueryClientProvider>
     </ErrorBoundary>

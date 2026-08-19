@@ -98,30 +98,30 @@ export function Wordmark({
       {showBadge && (
         <span
           style={{
-            fontSize: "10px",
+            fontSize: "8px",
             fontWeight: 700,
-            padding: "2px 7px",
+            padding: "1px 6px",
             borderRadius: "12px",
             background: onDark ? "rgba(216, 180, 254, 0.14)" : "rgba(124, 58, 237, 0.12)",
             color: onDark ? "#d8b4fe" : "#7c3aed",
             border: onDark ? "1px solid rgba(216, 180, 254, 0.28)" : "1px solid rgba(124, 58, 237, 0.22)",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
-            marginLeft: "8px",
+            marginLeft: "6px",
             lineHeight: 1,
             display: "inline-flex",
             alignItems: "center",
-            gap: "4px",
+            gap: "3px",
             verticalAlign: "middle",
           }}
         >
           <span
             style={{
-              width: "5px",
-              height: "5px",
+              width: "4px",
+              height: "4px",
               borderRadius: "50%",
               background: "#10b981",
-              boxShadow: "0 0 4px #10b981",
+              boxShadow: "0 0 3px #10b981",
               display: "inline-block",
             }}
           />
