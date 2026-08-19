@@ -97,11 +97,11 @@ export default function UsageBreakdownTable({
                           display: "inline-block",
                           padding: "2px 8px",
                           borderRadius: "var(--radius-sm)",
-                          backgroundColor: "var(--brand-50)",
-                          color: "var(--brand-700)",
+                          backgroundColor: "var(--color-brand-soft-bg)",
+                          color: "var(--color-brand-text)",
                           fontSize: "var(--font-size-xs)",
                           fontWeight: "var(--font-weight-medium)",
-                          border: "1px solid var(--brand-200)",
+                          border: "1px solid var(--color-brand-soft-border)",
                         }}
                       >
                         {row.tool || "—"}

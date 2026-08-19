@@ -152,12 +152,12 @@ p {
 
 /* Links */
 a {
-  color: var(--brand-600);
+  color: var(--color-brand-text);
   text-decoration: none;
 }
 
 a:hover {
-  color: var(--brand-700);
+  color: var(--brand-500);
 }
 
 /* Lists */

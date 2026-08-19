@@ -13,7 +13,7 @@ const TAB_LABELS: Record<Tab, string> = {
   daily: "Daily",
   weekly: "Weekly",
   monthly: "Monthly",
-  tools: "Tools & Sources",
+  tools: "Tools & Config",
 };
 
 const CONTAINER_STYLE: CSSProperties = {
@@ -109,6 +109,7 @@ export default function Layout() {
         </svg>
 
         <div
+          data-tauri-drag-region
           style={{
             ...CONTAINER_STYLE,
             position: "relative",
@@ -118,7 +119,7 @@ export default function Layout() {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <div data-tauri-drag-region style={{ display: "flex", alignItems: "center", gap: "14px" }}>
             <span
               style={{
                 display: "inline-flex",
@@ -131,17 +132,19 @@ export default function Layout() {
             >
               <Logo size={30} />
             </span>
-            <div>
+            <div data-tauri-drag-region>
               <h1
+                data-tauri-drag-region
                 style={{
                   margin: 0,
                   display: "flex",
                   alignItems: "center",
                 }}
               >
-                <Wordmark size={24} showBadge={true} onDark={true} />
+                <Wordmark size={30} showBadge={true} onDark={true} />
               </h1>
               <p
+                data-tauri-drag-region
                 style={{
                   margin: "2px 0 0 0",
                   fontSize: "var(--font-size-xs)",
@@ -154,9 +157,10 @@ export default function Layout() {
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div data-tauri-drag-region style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             {username && (
               <div
+                data-tauri-drag-region
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -217,13 +221,13 @@ export default function Layout() {
                   borderRadius: 0,
                   border: "none",
                   borderBottom: isActive
-                    ? "2px solid var(--brand-600)"
+                    ? "2px solid var(--color-brand-text)"
                     : "2px solid transparent",
                   background: "transparent",
                   cursor: "pointer",
                   fontSize: "var(--font-size-sm)",
                   fontWeight: "var(--font-weight-medium)",
-                  color: isActive ? "var(--brand-700)" : "var(--color-text-secondary)",
+                  color: isActive ? "var(--color-brand-text)" : "var(--color-text-secondary)",
                 }}
               >
                 {TAB_LABELS[tab]}

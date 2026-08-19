@@ -69,7 +69,7 @@ export default function TokenUsageBarChart({
                 padding: "3px 10px",
                 borderRadius: "12px",
                 backgroundColor: "rgba(16, 185, 129, 0.15)",
-                color: "var(--brand-700)",
+                color: "var(--color-brand-text)",
                 border: "1px solid rgba(16, 185, 129, 0.3)",
                 display: "inline-flex",
                 alignItems: "center",

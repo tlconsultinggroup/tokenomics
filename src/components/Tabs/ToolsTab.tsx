@@ -79,7 +79,7 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
       {/* Header Info Banner */}
       <div style={{ marginBottom: "var(--spacing-lg)" }}>
         <h3 style={{ fontSize: "var(--font-size-xl)", marginBottom: "var(--spacing-xs)" }}>
-          Tools & Data Sources
+          Tools & Config
         </h3>
         <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)" }}>
           Data pipelines currently wired into Tokenomics and full catalog of supported AI tools
@@ -157,7 +157,7 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
           <span style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
             Configured Sources
           </span>
-          <p style={{ fontSize: "var(--font-size-2xl)", fontWeight: "bold", margin: "4px 0 0 0", color: "var(--brand-600)" }}>
+          <p style={{ fontSize: "var(--font-size-2xl)", fontWeight: "bold", margin: "4px 0 0 0", color: "var(--color-brand-text)" }}>
             {enabledClients.length + extraDirs.length}
           </p>
           <span style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-tertiary)" }}>
@@ -358,9 +358,9 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
                   padding: "6px 12px",
                   borderRadius: "var(--radius-md)",
                   border: "1px solid",
-                  borderColor: selectedCategory === cat ? "var(--brand-600)" : "var(--color-border)",
-                  backgroundColor: selectedCategory === cat ? "var(--brand-50)" : "var(--color-bg-surface)",
-                  color: selectedCategory === cat ? "var(--brand-700)" : "var(--color-text-secondary)",
+                  borderColor: selectedCategory === cat ? "var(--color-brand-text)" : "var(--color-border)",
+                  backgroundColor: selectedCategory === cat ? "var(--color-brand-soft-bg)" : "var(--color-bg-surface)",
+                  color: selectedCategory === cat ? "var(--color-brand-text)" : "var(--color-text-secondary)",
                   fontSize: "var(--font-size-xs)",
                   fontWeight: "var(--font-weight-medium)",
                   cursor: "pointer",
@@ -461,7 +461,7 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
           }}
         >
           <div className="card" style={{ padding: "var(--spacing-md)" }}>
-            <span style={{ fontSize: "var(--font-size-xs)", fontWeight: "var(--font-weight-semibold)", color: "var(--brand-600)" }}>
+            <span style={{ fontSize: "var(--font-size-xs)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-brand-text)" }}>
               LiteLLM
             </span>
             <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", margin: "6px 0 0 0" }}>

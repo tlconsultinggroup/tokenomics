@@ -16,7 +16,7 @@ const THEME_ORDER: ThemeMode[] = ["system", "light", "dark"];
 export const useTheme = create<ThemeState>()(
   persist(
     (set, get) => ({
-      theme: "system",
+      theme: "dark",
       reduceMotion: false,
       setTheme: (theme) => set({ theme }),
       cycleTheme: () => {

@@ -4,7 +4,7 @@ import { DailyData } from "../lib/types";
 type Tone = "brand" | "info" | "warning" | "accent";
 
 const TONE_COLORS: Record<Tone, { fg: string; bg: string }> = {
-  brand: { fg: "var(--brand-600)", bg: "var(--brand-50)" },
+  brand: { fg: "var(--color-brand-text)", bg: "var(--color-brand-soft-bg)" },
   info: { fg: "var(--color-info)", bg: "var(--color-info-bg)" },
   warning: { fg: "var(--color-warning)", bg: "var(--color-warning-bg)" },
   accent: { fg: "var(--color-accent)", bg: "var(--color-accent-bg)" },
@@ -101,7 +101,7 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
         style={{
           fontSize: "var(--font-size-lg)",
           fontWeight: "var(--font-weight-bold)",
-          color: "var(--brand-800)",
+          color: "var(--color-text-primary)",
           margin: 0,
           marginBottom: subtext ? "2px" : 0,
         }}
