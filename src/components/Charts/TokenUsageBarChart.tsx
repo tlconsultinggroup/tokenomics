@@ -119,6 +119,8 @@ export default function TokenUsageBarChart({
                 fontSize: "12px",
                 boxShadow: "var(--shadow-md)",
               }}
+              labelStyle={{ color: "var(--color-text-primary)" }}
+              itemStyle={{ color: "var(--color-text-primary)" }}
               formatter={(value: number, name: string) => [
                 name === "Cost" ? `$${value.toFixed(3)}` : formatTokens(value),
                 name,
