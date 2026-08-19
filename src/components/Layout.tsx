@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Dashboard from "./Dashboard";
 import Footer from "./Footer";
 import Logo, { Wordmark } from "./Logo";
@@ -26,24 +26,12 @@ const CONTAINER_STYLE: CSSProperties = {
 export default function Layout() {
   const [currentTab, setCurrentTab] = useState<Tab>("daily");
   const [username, setUsername] = useState<string | null>(null);
-  const [headerHeight, setHeaderHeight] = useState(0);
-  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     api.system
       .getUser()
       .then((res) => setUsername(res.username))
       .catch(() => setUsername(null));
-  }, []);
-
-  useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
-    const updateHeight = () => setHeaderHeight(header.offsetHeight);
-    updateHeight();
-    const observer = new ResizeObserver(updateHeight);
-    observer.observe(header);
-    return () => observer.disconnect();
   }, []);
 
   return (
@@ -54,19 +42,23 @@ export default function Layout() {
         minHeight: "100vh",
       }}
     >
-      <header
-        ref={headerRef}
-        data-tauri-drag-region
+      <div
         style={{
           position: "sticky",
           top: 0,
           zIndex: 10,
-          overflow: "hidden",
-          borderBottom: "1px solid var(--color-footer-border)",
-          background: "var(--color-bg-header)",
-          boxShadow: "var(--shadow-sm)",
         }}
       >
+        <header
+          data-tauri-drag-region
+          style={{
+            position: "relative",
+            overflow: "hidden",
+            borderBottom: "1px solid var(--color-footer-border)",
+            background: "var(--color-bg-header)",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
         {/* Slow-drifting wave lines, same technique as the ai-advisory
             sibling project, faded out toward the left so it reads as an
             ambient accent rather than competing with the title. */}
@@ -219,9 +211,6 @@ export default function Layout() {
 
       <nav
         style={{
-          position: "sticky",
-          top: headerHeight,
-          zIndex: 9,
           borderBottom: "1px solid var(--color-border)",
           background: "var(--color-bg-surface)",
         }}
@@ -254,6 +243,7 @@ export default function Layout() {
           })}
         </div>
       </nav>
+      </div>
 
       <main style={{ flex: 1 }}>
         <div style={{ ...CONTAINER_STYLE, padding: "var(--spacing-xl)" }}>
