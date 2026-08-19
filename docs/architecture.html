@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tokenomics - Architecture Specification</title>
   
-  <!-- Inter Font -->
+  <!-- Inter & JetBrains Mono Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -17,6 +17,646 @@
 
   <!-- Mermaid for Flowcharts & Diagrams -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js"></script>
+  
+  <style>
+    :root {
+      --bg-primary: #0b1120;
+      --bg-card: #152033;
+      --bg-card-hover: #1e2d4a;
+      --border-color: #27374d;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #34d399;
+      --accent-purple: #c084fc;
+      --accent-amber: #fbbf24;
+      --code-bg: #090e1a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 1.5rem;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* Full Width Container */
+    .container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 0.3rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background-color: rgba(56, 189, 248, 0.12);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      background: linear-gradient(135deg, #38bdf8 0%, #34d399 50%, #f8fafc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 0.85rem;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      width: 100%;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.75rem 0;
+      color: var(--text-main);
+    }
+
+    p {
+      color: var(--text-main);
+      margin-bottom: 1rem;
+    }
+
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-main);
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    strong {
+      color: #fff;
+    }
+
+    /* Code & Syntax */
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9em;
+      background-color: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      color: var(--accent-amber);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    pre {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: #e2e8f0;
+      font-size: 0.875rem;
+    }
+
+    /* Interactive & Resizable Diagram Box */
+    .diagram-wrapper {
+      position: relative;
+      margin: 1.5rem 0;
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
+    .diagram-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(21, 32, 51, 0.9);
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .diagram-toolbar-title {
+      font-weight: 600;
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .diagram-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-control {
+      background-color: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      padding: 0.3rem 0.6rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .btn-control:hover {
+      background-color: rgba(56, 189, 248, 0.2);
+      border-color: var(--accent-blue);
+      color: #fff;
+    }
+
+    .diagram-container {
+      padding: 1.5rem;
+      overflow: auto;
+      resize: vertical;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease-out;
+      transform-origin: center top;
+    }
+
+    .diagram-container svg {
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    /* Tables */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background-color: rgba(15, 23, 42, 0.8);
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: var(--bg-card-hover);
+    }
+
+    /* Math Formula Block */
+    .math-block {
+      background-color: var(--code-bg);
+      border-left: 4px solid var(--accent-purple);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 0.5rem 0.5rem 0;
+      overflow-x: auto;
+    }
+
+    .pill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .pill-card {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+    }
+
+    .pill-card .title {
+      font-weight: 600;
+      color: var(--accent-green);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .pill-card .desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <span class="badge">Architecture Specification</span>
+      <h1>Tokenomics System Architecture</h1>
+      <p class="subtitle">A detailed breakdown of local session log parsing, pricing lookup engine, and multi-tier cost aggregation in Tokenomics.</p>
+    </header>
+
+    <!-- Overview -->
+    <div class="card">
+      <h2>1. High-Level System Architecture</h2>
+      <p>
+        Tokenomics is structured as a native, local-first application using <strong>Tauri 2</strong>. 
+        It operates <strong>100% locally</strong> on the host OS with zero telemetry, zero external database, and zero cloud accounts required.
+      </p>
+      
+      <div class="diagram-wrapper">
+        <div class="diagram-toolbar">
+          <span class="diagram-toolbar-title">📊 System Architecture Flowchart</span>
+          <div class="diagram-controls">
+            <button class="btn-control" onclick="zoomDiagram('diag1', 1.15)">🔍 Zoom In</button>
+            <button class="btn-control" onclick="zoomDiagram('diag1', 0.85)">🔍 Zoom Out</button>
+            <button class="btn-control" onclick="resetDiagram('diag1')">🔄 Reset</button>
+          </div>
+        </div>
+        <div class="diagram-container" id="diag1">
+          <pre class="mermaid">
+flowchart TD
+    subgraph Frontend["Frontend Layer (React 19 + TypeScript + Vite)"]
+        UI["Dashboard Views<br/>(Daily, Weekly, Monthly, Tools & Sources)"]
+        State["React State / Hooks"]
+        UI --> State
+    end
+
+    subgraph IPC["Tauri IPC Bridge"]
+        Commands["Tauri Command Handlers<br/>(get_daily_data, get_weekly_data, etc.)"]
+    end
+
+    subgraph Backend["Tauri App Shell (Rust)"]
+        Settings["AppSettings (%APPDATA%/tokenomics/settings.json)"]
+        AppDB["Local SQLite Store (db.rs)"]
+        Aggregator["Session Aggregator (aggregator.rs)"]
+    end
+
+    subgraph CoreEngine["tokenomics-core Engine"]
+        PathResolver["Path Resolution Engine<br/>(Cross-OS Environment & Home Detection)"]
+        Scanner["Parallel File Scanner<br/>(Rayon Multi-threaded)"]
+        Parsers["Format Parsers<br/>(JSON, JSONL, SQLite, CSV)"]
+        Cache["Message Cache"]
+        PricingEngine["Pricing Service & Resolver"]
+    end
+
+    subgraph LocalLogs["Local Disk Storage (User Host Machine)"]
+        LogsJSON["JSON / JSONL Session Files<br/>(~/.claude, ~/.openclaw, etc.)"]
+        LogsSQLite["SQLite DBs<br/>(kilo.db, sessions.db, state.db)"]
+        LogsCSV["CSV Cache<br/>(Cursor usage logs)"]
+    end
+
+    State <-->|"Async IPC Invocation"| Commands
+    Commands --> Settings
+    Commands --> Aggregator
+    Aggregator --> CoreEngine
+    CoreEngine --> PathResolver
+    CoreEngine --> Scanner
+    Scanner --> LocalLogs
+    Scanner --> Parsers
+    Parsers --> Cache
+    PricingEngine --> Parsers
+    AppDB <--> Aggregator
+          </pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="card">
+      <h2>2. Technology Stack & Subsystem Roles</h2>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Subsystem</th>
+              <th>Technology</th>
+              <th>Purpose & Functionality</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Desktop Shell & Packaging</strong></td>
+              <td>Tauri 2 (Rust)</td>
+              <td>Provides native windowing, system tray integration, auto-updater, host OS filesystem access, and native execution without browser runtime overhead.</td>
+            </tr>
+            <tr>
+              <td><strong>Frontend UI</strong></td>
+              <td>React 19, TypeScript, Vite, Tailwind CSS</td>
+              <td>Renders dashboard views, daily/weekly/monthly cost breakdowns, per-model usage tables, time series charts, and tool source settings.</td>
+            </tr>
+            <tr>
+              <td><strong>IPC Communication</strong></td>
+              <td>Tauri <code>invoke</code> Handlers</td>
+              <td>Asynchronous RPC mechanism connecting React components to Rust backend functions.</td>
+            </tr>
+            <tr>
+              <td><strong>Local Data Engine</strong></td>
+              <td><code>tokenomics-core</code> (Rust Crate)</td>
+              <td>Vendored core crate providing cross-platform path resolution, session log parsing, parallel file scanning, and pricing catalog resolution.</td>
+            </tr>
+            <tr>
+              <td><strong>Multi-Threading / Parallelism</strong></td>
+              <td><code>rayon</code></td>
+              <td>Parallelizes filesystem scanning and parsing of large numbers of local <code>.json</code> and <code>.jsonl</code> files across CPU worker threads.</td>
+            </tr>
+            <tr>
+              <td><strong>Database & Caching</strong></td>
+              <td><code>rusqlite</code> / SQLite</td>
+              <td>Local persistence layer for app configuration and message caching to avoid re-parsing unchanged historical session files on start.</td>
+            </tr>
+            <tr>
+              <td><strong>Serialization / Parsing</strong></td>
+              <td><code>serde</code>, <code>serde_json</code></td>
+              <td>Fast JSON and JSONL deserialization for local session log formats and pricing catalogs.</td>
+            </tr>
+            <tr>
+              <td><strong>Path & System Discovery</strong></td>
+              <td><code>dirs</code> Crate</td>
+              <td>Platform-agnostic resolution of <code>%APPDATA%</code>, <code>$XDG_DATA_HOME</code>, <code>~/Library/Application Support</code>, and <code>$HOME</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- How Tokenomics Reads Local Data -->
+    <div class="card">
+      <h2>3. How Tokenomics Reads Local Token Usage</h2>
+      <p>
+        Tokenomics does not attach network proxies or hook into running processes. Instead, it inspects the <strong>local persistent session logs</strong> written directly to disk by AI coding tools.
+      </p>
+
+      <div class="diagram-wrapper">
+        <div class="diagram-toolbar">
+          <span class="diagram-toolbar-title">🔄 Local Scanning Sequence Diagram</span>
+          <div class="diagram-controls">
+            <button class="btn-control" onclick="zoomDiagram('diag2', 1.15)">🔍 Zoom In</button>
+            <button class="btn-control" onclick="zoomDiagram('diag2', 0.85)">🔍 Zoom Out</button>
+            <button class="btn-control" onclick="resetDiagram('diag2')">🔄 Reset</button>
+          </div>
+        </div>
+        <div class="diagram-container" id="diag2">
+          <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    participant UI as React UI
+    participant Cmd as Tauri Command ('get_daily_data')
+    participant Scanner as tokenomics-core scanner
+    participant Parser as Tool-Specific Parsers
+    participant Pricing as Pricing Engine
+    participant Agg as Aggregator
+
+    UI->>Cmd: Call IPC command
+    Cmd->>Scanner: Resolve paths for enabled ClientIds
+    Scanner->>Scanner: Resolve OS-specific root (%APPDATA%, XDG, HOME, Env)
+    Scanner->>Parser: Scan files via Rayon thread pool
+    Parser->>Parser: Parse JSON / JSONL / SQLite / CSV entries
+    Parser->>Pricing: Check for embedded cost or evaluate catalog rate
+    Pricing-->>Parser: Attach input/output/cache cost ($)
+    Parser-->>Cmd: Return Vec of UnifiedMessage
+    Cmd->>Agg: Aggregate by time window (Daily / Weekly / Monthly)
+    Agg-->>UI: Return aggregated JSON response
+          </pre>
+        </div>
+      </div>
+
+      <h3>3.1 Supported Log Sources & File Formats</h3>
+
+      <div class="pill-grid">
+        <div class="pill-card">
+          <div class="title">JSON / JSONL Log Streams</div>
+          <div class="desc">Claude Code (<code>~/.claude/projects/</code>), OpenCode, Codex CLI, Gemini CLI, Copilot CLI, Roo Code, Kilo Code, Cline, OpenClaw, Qwen, Droid, Grok.</div>
+        </div>
+        <div class="pill-card">
+          <div class="title">Embedded SQLite DBs</div>
+          <div class="desc">Goose (<code>sessions.db</code>), Hermes Agent (<code>state.db</code>), Zed Agent (<code>threads.db</code>), Kilo CLI (<code>kilo.db</code>).</div>
+        </div>
+        <div class="pill-card">
+          <div class="title">CSV Export Caching</div>
+          <div class="desc">Cursor IDE (<code>usage*.csv</code> cached under <code>.config/tokenomics/cursor-cache/</code>).</div>
+        </div>
+      </div>
+
+      <h3>3.2 Data Normalization (<code>UnifiedMessage</code>)</h3>
+      <p>Every parsed token usage log entry is converted into a standardized struct:</p>
+      <pre><code>pub struct UnifiedMessage {
+    pub client: String,        // "claude", "opencode", "cursor", "copilot", etc.
+    pub model_id: String,      // Raw model ID (e.g. "claude-3-5-sonnet-200000")
+    pub provider_id: String,   // Provider ID (e.g. "anthropic", "openai", "google")
+    pub session_id: String,    // Unique session/thread identifier
+    pub timestamp: i64,        // Unix timestamp in milliseconds
+    pub tokens: TokenBreakdown,// Input, Output, Cache Read, Cache Write, Reasoning
+    pub cost: f64,             // Authoritative or catalog-calculated cost in USD
+}</code></pre>
+    </div>
+
+    <!-- Pricing Engine -->
+    <div class="card">
+      <h2>4. Cost Calculation Engine & Pricing Catalogs</h2>
+      <p>
+        Cost calculation follows a strict <strong>precedence hierarchy</strong> to ensure accuracy without overriding authoritative log data.
+      </p>
+
+      <div class="diagram-wrapper">
+        <div class="diagram-toolbar">
+          <span class="diagram-toolbar-title">⚡ Pricing & Model Resolution Flowchart</span>
+          <div class="diagram-controls">
+            <button class="btn-control" onclick="zoomDiagram('diag3', 1.15)">🔍 Zoom In</button>
+            <button class="btn-control" onclick="zoomDiagram('diag3', 0.85)">🔍 Zoom Out</button>
+            <button class="btn-control" onclick="resetDiagram('diag3')">🔄 Reset</button>
+          </div>
+        </div>
+        <div class="diagram-container" id="diag3">
+          <pre class="mermaid">
+flowchart TD
+    A["Raw Session Message Parsed"] --> B{"Does tool log authoritative cost?<br/>(e.g., usage.cost.total or actual_cost_usd)"}
+    
+    B -- Yes --> C["Keep Authoritative Cost<br/>(Mark as non-estimated)"]
+    B -- No --> D["Pass to PricingService Lookup Engine"]
+    
+    D --> E["1. Exact Model ID Match<br/>(e.g., anthropic/claude-3-5-sonnet)"]
+    E -- Miss --> F["2. Strip Reasoning/Proxy Tier Suffix<br/>(e.g. gpt-4o(high) → gpt-4o)"]
+    F -- Miss --> G["3. Provider-Scoped Match<br/>(e.g. azure/gpt-4o)"]
+    G -- Miss --> H["4. Model-Part & Prefix/Suffix Strip"]
+    H -- Miss --> I["5. Safe Fuzzy Match<br/>(Checked against blocklist & consensus)"]
+    
+    E -- Hit --> J["Retrieve Rate Vector<br/>(Input, Output, Cache Read, Cache Write)"]
+    F -- Hit --> J
+    G -- Hit --> J
+    H -- Hit --> J
+    I -- Hit --> J
+    
+    J --> K["Apply Tiered Pricing Formula"]
+    K --> L["Calculated Cost Assigned to Message"]
+          </pre>
+        </div>
+      </div>
+
+      <h3>4.1 Pricing Formula</h3>
+      <p>The financial cost for a message is calculated as:</p>
+      
+      <div class="math-block">
+        $$\text{Cost} = \sum_{\text{bucket}} \text{TieredCost}(\text{Tokens}_{\text{bucket}}, P_{\text{base}}, \text{Tiers})$$
+      </div>
+
+      <p>Expanding across token categories:</p>
+
+      <div class="math-block">
+        $$\text{Total Cost} = (T_{\text{in}} \times P_{\text{input}}) + ((T_{\text{out}} + T_{\text{reasoning}}) \times P_{\text{output}}) + (T_{\text{cache\_read}} \times P_{\text{cache\_read}}) + (T_{\text{cache\_write}} \times P_{\text{cache\_write}})$$
+      </div>
+
+      <ul>
+        <li>\(T_{\text{in}}\): Prompt input tokens</li>
+        <li>\(T_{\text{out}}\): Completion output tokens</li>
+        <li>\(T_{\text{reasoning}}\): Reasoning/thinking tokens (priced at completion rate)</li>
+        <li>\(T_{\text{cache\_read}}\): Cached prompt tokens read</li>
+        <li>\(T_{\text{cache\_write}}\): Cache creation/write tokens</li>
+        <li>\(P\): Per-token rate derived from the model pricing catalog</li>
+      </ul>
+    </div>
+
+    <!-- Time Windows -->
+    <div class="card">
+      <h2>5. Session Aggregation & Time Windows</h2>
+      <p>Once parsed and costed, messages are grouped by the <code>Aggregator</code> into time periods for display:</p>
+      <ul>
+        <li><strong>Daily Window</strong>: Aggregates sessions in a rolling 5-hour or 24-hour daily window, broken down into time series data points.</li>
+        <li><strong>Weekly Window</strong>: Aggregates rolling 7-day metrics, broken down by day.</li>
+        <li><strong>Monthly Window</strong>: Aggregates the current calendar month.</li>
+      </ul>
+    </div>
+
+    <footer>
+      Tokenomics Architecture Specification &bull; Published August 2026 &bull; 100% Local Privacy First
+    </footer>
+  </div>
+
+  <script>
+    const diagramScales = {
+      diag1: 1,
+      diag2: 1,
+      diag3: 1
+    };
+
+    function zoomDiagram(id, factor) {
+      const container = document.getElementById(id);
+      if (!container) return;
+      
+      diagramScales[id] = (diagramScales[id] || 1) * factor;
+      diagramScales[id] = Math.min(Math.max(diagramScales[id], 0.5), 3); // clamp between 0.5x and 3x
+      
+      const svg = container.querySelector('svg');
+      if (svg) {
+        svg.style.transform = `scale(${diagramScales[id]})`;
+        svg.style.transformOrigin = 'center top';
+        svg.style.transition = 'transform 0.15s ease-out';
+      }
+    }
+
+    function resetDiagram(id) {
+      const container = document.getElementById(id);
+      if (!container) return;
+      
+      diagramScales[id] = 1;
+      const svg = container.querySelector('svg');
+      if (svg) {
+        svg.style.transform = 'scale(1)';
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true,
+          curve: 'basis'
+        },
+        sequence: {
+          useMaxWidth: true,
+          showSequenceNumbers: true
+        },
+        themeVariables: {
+          darkMode: true,
+          background: '#090e1a',
+          primaryColor: '#152033',
+          primaryBorderColor: '#38bdf8',
+          primaryTextColor: '#f8fafc',
+          lineColor: '#94a3b8'
+        }
+      });
+    });
+  </script>
+</body>
+</html>
   
   <style>
     :root {
