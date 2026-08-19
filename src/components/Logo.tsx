@@ -20,62 +20,24 @@ export default function Logo({ size = 32, className, style }: LogoProps) {
       <defs>
         <linearGradient id="tokenomics-logo-brand" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#35a97c" />
-          <stop offset="60%" stopColor="#178f63" />
           <stop offset="100%" stopColor="#0f6b4a" />
         </linearGradient>
 
-        <linearGradient id="tokenomics-logo-accent" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#7c3aed" />
-          <stop offset="100%" stopColor="#a855f7" />
+        <linearGradient id="tokenomics-logo-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#a855f7" />
+          <stop offset="100%" stopColor="#7c3aed" />
         </linearGradient>
-
-        <filter id="tokenomics-logo-glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="0.8" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
       </defs>
 
-      {/* Hexagonal Shield / Token Base */}
-      <path
-        d="M 20 2 L 34 10 L 34 30 L 20 38 L 6 30 L 6 10 Z"
-        fill="url(#tokenomics-logo-brand)"
-        rx="2"
-      />
+      {/* Rounded badge, brand gradient */}
+      <rect x="3" y="3" width="34" height="34" rx="10" fill="url(#tokenomics-logo-brand)" />
 
-      {/* Inner Dark Token Core */}
-      <path
-        d="M 20 5.2 L 31.5 11.8 L 31.5 28.2 L 20 34.8 L 8.5 28.2 L 8.5 11.8 Z"
-        fill="#050b16"
-        opacity="0.92"
-      />
+      {/* Simple "T" monogram */}
+      <rect x="11" y="12" width="18" height="4.4" rx="2.2" fill="#ffffff" />
+      <rect x="17.8" y="12" width="4.4" height="17" rx="2.2" fill="#ffffff" />
 
-      {/* Layered Stacked Token / Coin Rings */}
-      <ellipse cx="20" cy="27" rx="8" ry="3" fill="none" stroke="#2563eb" strokeWidth="1.2" opacity="0.75" />
-      <ellipse cx="20" cy="22" rx="8" ry="3" fill="none" stroke="#35a97c" strokeWidth="1.4" />
-      <ellipse
-        cx="20"
-        cy="17"
-        rx="8"
-        ry="3"
-        fill="none"
-        stroke="url(#tokenomics-logo-accent)"
-        strokeWidth="1.6"
-        filter="url(#tokenomics-logo-glow)"
-      />
-
-      {/* Upward Analytics Trend Line */}
-      <path
-        d="M 13 25 L 18 20 L 22 21 L 27 13"
-        fill="none"
-        stroke="#35a97c"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-
-      {/* Glowing AI Spark Node */}
-      <circle cx="27" cy="13" r="2.2" fill="#a855f7" />
-      <circle cx="27" cy="13" r="1" fill="#ffffff" />
+      {/* Single accent node */}
+      <circle cx="29.5" cy="10.5" r="3" fill="url(#tokenomics-logo-accent)" />
     </svg>
   );
 }
