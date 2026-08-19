@@ -53,6 +53,7 @@ export default function DailyTab({ data }: DailyTabProps) {
         rows={modelRows}
         totalCost={data.totalCost}
         showTokens={true}
+        showRates={true}
       />
 
       {/* Provider Breakdown Table with Horizontal Usage Bars */}

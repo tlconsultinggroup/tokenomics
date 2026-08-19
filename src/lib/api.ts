@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { DailyData, AppSettings, DataPaths } from "./types";
+import { DailyData, AppSettings, DataPaths, ModelRate } from "./types";
 
 // Tauri v2 rejects invoke() promises with the raw deserialized command error
 // value (here, a bare string — see src-tauri/src/error.rs's untagged
@@ -22,6 +22,8 @@ export const api = {
     getDaily: () => invokeCommand<DailyData>("get_daily_data"),
     getWeekly: () => invokeCommand<DailyData>("get_weekly_data"),
     getMonthly: () => invokeCommand<DailyData>("get_monthly_data"),
+    getModelRates: (models: Record<string, string>) =>
+      invokeCommand<Record<string, ModelRate>>("get_model_rates", { models }),
   },
 
   settings: {

@@ -55,6 +55,7 @@ export default function MonthlyTab({ data }: MonthlyTabProps) {
         rows={modelRows}
         totalCost={data.totalCost}
         showTokens={true}
+        showRates={true}
       />
 
       {/* Provider Breakdown Table with Horizontal Usage Bars */}

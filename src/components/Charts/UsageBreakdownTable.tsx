@@ -1,4 +1,6 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { api } from "../../lib/api";
+import { ModelRate } from "../../lib/types";
 
 export interface BreakdownRow {
   key: string;
@@ -15,6 +17,10 @@ interface UsageBreakdownTableProps {
   rows: BreakdownRow[];
   totalCost: number;
   showTokens?: boolean;
+  /** Show "In $/M" / "Out $/M" columns using published per-token rates
+   *  (not derived from actual spend, which only gives a blended total).
+   *  Only meaningful for a by-model table, since rates are per-model. */
+  showRates?: boolean;
 }
 
 function capitalize(text: string) {
@@ -33,7 +39,27 @@ export default function UsageBreakdownTable({
   rows,
   totalCost,
   showTokens = true,
+  showRates = false,
 }: UsageBreakdownTableProps) {
+  const [rates, setRates] = useState<Record<string, ModelRate>>({});
+
+  // Rates are published per-token pricing, not derivable from the aggregated
+  // spend data already in `rows` - fetch separately, keyed by model+provider
+  // so a switch between tabs/models re-fetches.
+  const rateKey = showRates ? rows.map((r) => `${r.key}::${r.provider ?? ""}`).join("|") : "";
+
+  useEffect(() => {
+    if (!showRates || rows.length === 0) {
+      setRates({});
+      return;
+    }
+    const modelProviders = Object.fromEntries(rows.map((r) => [r.key, r.provider ?? ""]));
+    api.data
+      .getModelRates(modelProviders)
+      .then(setRates)
+      .catch((err) => console.error("Could not fetch model rates:", err));
+  }, [rateKey, showRates]);
+
   if (!rows || rows.length === 0) {
     return (
       <div style={{ marginTop: "var(--spacing-lg)" }}>
@@ -70,6 +96,8 @@ export default function UsageBreakdownTable({
               {showTokens && <th style={{ padding: "var(--spacing-sm) var(--spacing-md)" }}>Provider</th>}
               {showTokens && <th style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right" }}>Tokens In</th>}
               {showTokens && <th style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right" }}>Tokens Out</th>}
+              {showRates && <th style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right" }}>In $/M</th>}
+              {showRates && <th style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right" }}>Out $/M</th>}
               <th style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right" }}>Cost</th>
               <th style={{ padding: "var(--spacing-sm) var(--spacing-md)", width: "180px" }}>Share / Volume</th>
             </tr>
@@ -121,6 +149,16 @@ export default function UsageBreakdownTable({
                   {showTokens && (
                     <td style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right", fontFamily: "monospace" }}>
                       {formatTokens(row.outputTokens ?? 0)}
+                    </td>
+                  )}
+                  {showRates && (
+                    <td style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right", fontFamily: "monospace", color: "var(--color-text-secondary)" }}>
+                      {rates[row.key] ? `$${rates[row.key].inputCostPerMillion.toFixed(2)}` : "—"}
+                    </td>
+                  )}
+                  {showRates && (
+                    <td style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right", fontFamily: "monospace", color: "var(--color-text-secondary)" }}>
+                      {rates[row.key] ? `$${rates[row.key].outputCostPerMillion.toFixed(2)}` : "—"}
                     </td>
                   )}
                   <td style={{ padding: "var(--spacing-sm) var(--spacing-md)", textAlign: "right", fontWeight: "var(--font-weight-semibold)" }}>

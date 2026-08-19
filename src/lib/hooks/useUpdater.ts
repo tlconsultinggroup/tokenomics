@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { create } from "zustand";
 import { check, type Update } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 
@@ -11,26 +11,44 @@ export type UpdateStatus =
   | { state: "ready" }
   | { state: "error"; message: string };
 
-export function useUpdater() {
-  const [status, setStatus] = useState<UpdateStatus>({ state: "idle" });
-  const [pendingUpdate, setPendingUpdate] = useState<Update | null>(null);
+interface UpdaterState {
+  status: UpdateStatus;
+  pendingUpdate: Update | null;
+  bannerDismissed: boolean;
+  checkForUpdate: () => Promise<void>;
+  installUpdate: () => Promise<void>;
+  dismissBanner: () => void;
+}
 
-  const checkForUpdate = useCallback(async () => {
-    setStatus({ state: "checking" });
+// A single shared store (not per-component state) so the auto-check on
+// launch, the sticky top banner, and the manual "Check for updates" button
+// in Tools & Config all read/drive the same in-flight check instead of each
+// firing its own redundant request.
+export const useUpdaterStore = create<UpdaterState>((set, get) => ({
+  status: { state: "idle" },
+  pendingUpdate: null,
+  bannerDismissed: false,
+
+  checkForUpdate: async () => {
+    set({ status: { state: "checking" } });
     try {
       const update = await check();
       if (!update) {
-        setStatus({ state: "up-to-date" });
+        set({ status: { state: "up-to-date" } });
         return;
       }
-      setPendingUpdate(update);
-      setStatus({ state: "available", version: update.version, body: update.body });
+      set({
+        pendingUpdate: update,
+        status: { state: "available", version: update.version, body: update.body },
+        bannerDismissed: false,
+      });
     } catch (e) {
-      setStatus({ state: "error", message: e instanceof Error ? e.message : String(e) });
+      set({ status: { state: "error", message: e instanceof Error ? e.message : String(e) } });
     }
-  }, []);
+  },
 
-  const installUpdate = useCallback(async () => {
+  installUpdate: async () => {
+    const { pendingUpdate } = get();
     if (!pendingUpdate) return;
     try {
       let downloaded = 0;
@@ -40,16 +58,23 @@ export function useUpdater() {
           total = event.data.contentLength ?? 0;
         } else if (event.event === "Progress") {
           downloaded += event.data.chunkLength;
-          setStatus({ state: "downloading", progress: total > 0 ? downloaded / total : 0 });
+          set({ status: { state: "downloading", progress: total > 0 ? downloaded / total : 0 } });
         } else if (event.event === "Finished") {
-          setStatus({ state: "ready" });
+          set({ status: { state: "ready" } });
         }
       });
       await relaunch();
     } catch (e) {
-      setStatus({ state: "error", message: e instanceof Error ? e.message : String(e) });
+      set({ status: { state: "error", message: e instanceof Error ? e.message : String(e) } });
     }
-  }, [pendingUpdate]);
+  },
 
+  dismissBanner: () => set({ bannerDismissed: true }),
+}));
+
+export function useUpdater() {
+  const status = useUpdaterStore((s) => s.status);
+  const checkForUpdate = useUpdaterStore((s) => s.checkForUpdate);
+  const installUpdate = useUpdaterStore((s) => s.installUpdate);
   return { status, checkForUpdate, installUpdate };
 }

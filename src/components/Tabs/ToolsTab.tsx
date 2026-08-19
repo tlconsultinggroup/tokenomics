@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { getVersion } from "@tauri-apps/api/app";
+import { open } from "@tauri-apps/plugin-shell";
 import { DailyData, DataPaths } from "../../lib/types";
 import { api } from "../../lib/api";
 import { SUPPORTED_TOOLS } from "../../lib/supportedTools";
@@ -13,6 +14,25 @@ function formatTokens(count: number) {
   if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M`;
   if (count >= 1_000) return `${(count / 1_000).toFixed(1)}k`;
   return `${count}`;
+}
+
+const PRICING_SOURCE_CARD_STYLE: CSSProperties = {
+  padding: "var(--spacing-md)",
+  display: "block",
+  textDecoration: "none",
+  color: "inherit",
+  cursor: "pointer",
+  transition: "border-color 0.15s ease, box-shadow 0.15s ease",
+};
+
+function ExternalLinkIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
 }
 
 export default function ToolsTab({ monthlyData }: ToolsTabProps) {
@@ -460,30 +480,48 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
             marginBottom: "var(--spacing-md)",
           }}
         >
-          <div className="card" style={{ padding: "var(--spacing-md)" }}>
-            <span style={{ fontSize: "var(--font-size-xs)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-brand-text)" }}>
+          <a
+            href="https://github.com/BerriAI/litellm"
+            onClick={(e) => { e.preventDefault(); open("https://github.com/BerriAI/litellm"); }}
+            className="card"
+            style={PRICING_SOURCE_CARD_STYLE}
+          >
+            <span style={{ fontSize: "var(--font-size-xs)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-brand-text)", display: "inline-flex", alignItems: "center", gap: "4px" }}>
               LiteLLM
+              <ExternalLinkIcon />
             </span>
             <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", margin: "6px 0 0 0" }}>
               Community-maintained pricing catalog covering most providers and models. The largest of the three sources.
             </p>
-          </div>
-          <div className="card" style={{ padding: "var(--spacing-md)" }}>
-            <span style={{ fontSize: "var(--font-size-xs)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-info)" }}>
+          </a>
+          <a
+            href="https://models.dev"
+            onClick={(e) => { e.preventDefault(); open("https://models.dev"); }}
+            className="card"
+            style={PRICING_SOURCE_CARD_STYLE}
+          >
+            <span style={{ fontSize: "var(--font-size-xs)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-info)", display: "inline-flex", alignItems: "center", gap: "4px" }}>
               models.dev
+              <ExternalLinkIcon />
             </span>
             <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", margin: "6px 0 0 0" }}>
               A second independent pricing catalog, used to fill gaps and cross-check LiteLLM's rates.
             </p>
-          </div>
-          <div className="card" style={{ padding: "var(--spacing-md)" }}>
-            <span style={{ fontSize: "var(--font-size-xs)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-accent)" }}>
+          </a>
+          <a
+            href="https://openrouter.ai"
+            onClick={(e) => { e.preventDefault(); open("https://openrouter.ai"); }}
+            className="card"
+            style={PRICING_SOURCE_CARD_STYLE}
+          >
+            <span style={{ fontSize: "var(--font-size-xs)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-accent)", display: "inline-flex", alignItems: "center", gap: "4px" }}>
               OpenRouter
+              <ExternalLinkIcon />
             </span>
             <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", margin: "6px 0 0 0" }}>
               OpenRouter's own published per-model rates, queried directly from their API.
             </p>
-          </div>
+          </a>
         </div>
 
         <div className="card" style={{ padding: "var(--spacing-md)", marginBottom: "var(--spacing-md)" }}>

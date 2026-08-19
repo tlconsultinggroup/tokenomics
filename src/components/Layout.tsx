@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import Logo, { Wordmark } from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 import WindowControls from "./WindowControls";
+import UpdateBanner from "./UpdateBanner";
 import { api } from "../lib/api";
 
 const TABS = ["daily", "weekly", "monthly", "tools"] as const;
@@ -49,6 +50,7 @@ export default function Layout() {
           zIndex: 10,
         }}
       >
+        <UpdateBanner />
         <header
           data-tauri-drag-region
           style={{

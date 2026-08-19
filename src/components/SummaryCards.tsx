@@ -3,6 +3,12 @@ import { DailyData } from "../lib/types";
 
 type Tone = "brand" | "info" | "warning" | "accent";
 
+function formatTokens(count: number) {
+  if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(2)}M`;
+  if (count >= 1_000) return `${(count / 1_000).toFixed(1)}k`;
+  return `${count}`;
+}
+
 const TONE_COLORS: Record<Tone, { fg: string; bg: string }> = {
   brand: { fg: "var(--color-brand-text)", bg: "var(--color-brand-soft-bg)" },
   info: { fg: "var(--color-info)", bg: "var(--color-info-bg)" },
@@ -178,11 +184,11 @@ export default function SummaryCards({ data }: SummaryCardsProps) {
         />
         <Card
           label="Total tokens"
-          value={`${(data.totalTokens / 1000).toFixed(0)}k`}
+          value={formatTokens(data.totalTokens)}
           subtext={
-            `In ${(data.inputTokens / 1000).toFixed(1)}k, out ${(data.outputTokens / 1000).toFixed(1)}k` +
+            `In ${formatTokens(data.inputTokens)}, out ${formatTokens(data.outputTokens)}` +
             (data.cacheReadTokens + data.cacheWriteTokens > 0
-              ? `, cache ${((data.cacheReadTokens + data.cacheWriteTokens) / 1000).toFixed(1)}k`
+              ? `, cache ${formatTokens(data.cacheReadTokens + data.cacheWriteTokens)}`
               : "")
           }
           tone="info"

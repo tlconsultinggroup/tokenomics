@@ -49,6 +49,7 @@ export default function WeeklyTab({ data }: WeeklyTabProps) {
         rows={modelRows}
         totalCost={data.totalCost}
         showTokens={true}
+        showRates={true}
       />
 
       {/* Provider Breakdown Table with Horizontal Usage Bars */}

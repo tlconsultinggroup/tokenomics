@@ -4,6 +4,7 @@ use crate::parsers::SessionScanner;
 use crate::config::AppSettings;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use tokenomics_core::pricing::PricingService;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -24,6 +25,40 @@ pub struct DataResponse {
     pub input_tokens_by_model: HashMap<String, i64>,
     pub output_tokens_by_model: HashMap<String, i64>,
     pub time_series: Vec<TimeSeriesPoint>,
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ModelRate {
+    pub input_cost_per_million: f64,
+    pub output_cost_per_million: f64,
+}
+
+/// Resolve published per-token pricing (not derived from actual spend, which
+/// only tells us the blended total) into a $/million rate for each model, so
+/// the UI can show "In $/M" / "Out $/M" alongside the actual cost breakdown.
+/// `models` maps model id -> provider id, mirroring `DailyData.modelProviders`.
+#[tauri::command]
+pub async fn get_model_rates(models: HashMap<String, String>) -> Result<HashMap<String, ModelRate>> {
+    let pricing = PricingService::get_or_init().await?;
+
+    let mut rates = HashMap::with_capacity(models.len());
+    for (model, provider) in models {
+        if let Some(result) = pricing.lookup_with_source_and_provider(&model, None, Some(&provider))
+        {
+            rates.insert(
+                model,
+                ModelRate {
+                    input_cost_per_million: result.pricing.input_cost_per_token.unwrap_or(0.0)
+                        * 1_000_000.0,
+                    output_cost_per_million: result.pricing.output_cost_per_token.unwrap_or(0.0)
+                        * 1_000_000.0,
+                },
+            );
+        }
+    }
+
+    Ok(rates)
 }
 
 #[tauri::command]

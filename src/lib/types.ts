@@ -30,6 +30,11 @@ export interface DailyData {
   timeSeries?: TimeSeriesPoint[];
 }
 
+export interface ModelRate {
+  inputCostPerMillion: number;
+  outputCostPerMillion: number;
+}
+
 export interface Session {
   timestamp: string;
   source: string;
