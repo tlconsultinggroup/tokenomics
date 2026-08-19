@@ -221,21 +221,30 @@
     }
 
     .diagram-container {
-      padding: 1.5rem;
+      padding: 2rem 1rem;
       overflow: auto;
       resize: vertical;
-      min-height: 380px;
+      min-height: 550px;
+      width: 100%;
+      background-color: var(--code-bg);
       display: flex;
+      flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
+    }
+
+    .diagram-container .mermaid {
+      width: 100%;
+      display: flex;
       justify-content: center;
-      transition: transform 0.15s ease-out;
-      transform-origin: center top;
+      align-items: flex-start;
     }
 
     .diagram-container svg {
       max-width: 100% !important;
       width: 100% !important;
       height: auto !important;
+      min-height: 480px;
     }
 
     /* Tables */
@@ -340,7 +349,7 @@
           </div>
         </div>
         <div class="diagram-container" id="diag1">
-          <pre class="mermaid">
+          <div class="mermaid">
 flowchart TD
     subgraph Frontend["Frontend Layer (React 19 + TypeScript + Vite)"]
         UI["Dashboard Views<br/>(Daily, Weekly, Monthly, Tools & Sources)"]
@@ -372,7 +381,7 @@ flowchart TD
         LogsCSV["CSV Cache<br/>(Cursor usage logs)"]
     end
 
-    State <-->|"Async IPC Invocation"| Commands
+    State <--> Commands
     Commands --> Settings
     Commands --> Aggregator
     Aggregator --> CoreEngine
@@ -383,7 +392,7 @@ flowchart TD
     Parsers --> Cache
     PricingEngine --> Parsers
     AppDB <--> Aggregator
-          </pre>
+          </div>
         </div>
       </div>
     </div>
@@ -463,27 +472,27 @@ flowchart TD
           </div>
         </div>
         <div class="diagram-container" id="diag2">
-          <pre class="mermaid">
+          <div class="mermaid">
 sequenceDiagram
     autonumber
-    participant UI as React UI
-    participant Cmd as Tauri Command ('get_daily_data')
-    participant Scanner as tokenomics-core scanner
-    participant Parser as Tool-Specific Parsers
-    participant Pricing as Pricing Engine
-    participant Agg as Aggregator
+    participant UI as "React UI"
+    participant Cmd as "Tauri Command"
+    participant Scanner as "tokenomics-core scanner"
+    participant Parser as "Tool-Specific Parsers"
+    participant Pricing as "Pricing Engine"
+    participant Agg as "Aggregator"
 
-    UI->>Cmd: Call IPC command
+    UI->>Cmd: Call IPC command (get_daily_data)
     Cmd->>Scanner: Resolve paths for enabled ClientIds
     Scanner->>Scanner: Resolve OS-specific root (%APPDATA%, XDG, HOME, Env)
     Scanner->>Parser: Scan files via Rayon thread pool
     Parser->>Parser: Parse JSON / JSONL / SQLite / CSV entries
     Parser->>Pricing: Check for embedded cost or evaluate catalog rate
-    Pricing-->>Parser: Attach input/output/cache cost ($)
-    Parser-->>Cmd: Return Vec of UnifiedMessage
-    Cmd->>Agg: Aggregate by time window (Daily / Weekly / Monthly)
+    Pricing-->>Parser: Attach input / output / cache cost ($)
+    Parser-->>Cmd: Return UnifiedMessage list
+    Cmd->>Agg: Aggregate by time window
     Agg-->>UI: Return aggregated JSON response
-          </pre>
+          </div>
         </div>
       </div>
 
@@ -534,7 +543,7 @@ sequenceDiagram
           </div>
         </div>
         <div class="diagram-container" id="diag3">
-          <pre class="mermaid">
+          <div class="mermaid">
 flowchart TD
     A["Raw Session Message Parsed"] --> B{"Does tool log authoritative cost?<br/>(e.g., usage.cost.total or actual_cost_usd)"}
     
@@ -555,7 +564,7 @@ flowchart TD
     
     J --> K["Apply Tiered Pricing Formula"]
     K --> L["Calculated Cost Assigned to Message"]
-          </pre>
+          </div>
         </div>
       </div>
 
@@ -636,12 +645,12 @@ flowchart TD
         startOnLoad: true,
         theme: 'dark',
         flowchart: {
-          useMaxWidth: true,
+          useMaxWidth: false,
           htmlLabels: true,
           curve: 'basis'
         },
         sequence: {
-          useMaxWidth: true,
+          useMaxWidth: false,
           showSequenceNumbers: true
         },
         themeVariables: {
@@ -657,32 +666,6 @@ flowchart TD
   </script>
 </body>
 </html>
-  
-  <style>
-    :root {
-      --bg-primary: #0f172a;
-      --bg-card: #1e293b;
-      --bg-card-hover: #334155;
-      --border-color: #334155;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent-blue: #38bdf8;
-      --accent-green: #34d399;
-      --accent-purple: #c084fc;
-      --accent-amber: #fbbf24;
-      --code-bg: #0f172a;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-main);
       line-height: 1.6;
       padding: 2rem 1rem;
     }
