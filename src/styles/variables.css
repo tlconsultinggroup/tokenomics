@@ -97,7 +97,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --color-bg-page: var(--slate-900);
     --color-bg-surface: var(--slate-800);
     --color-bg-surface-muted: #16213a;
@@ -116,4 +116,25 @@
     --color-info-bg: rgba(37, 99, 235, 0.12);
     --color-accent-bg: rgba(124, 58, 237, 0.12);
   }
+}
+
+/* Explicit in-app toggle wins in both directions regardless of OS setting. */
+:root[data-theme="dark"] {
+  --color-bg-page: var(--slate-900);
+  --color-bg-surface: var(--slate-800);
+  --color-bg-surface-muted: #16213a;
+  --color-bg-row-hover: rgba(53, 169, 124, 0.12);
+
+  --color-text-primary: var(--slate-50);
+  --color-text-secondary: var(--slate-400);
+  --color-text-tertiary: var(--slate-500);
+
+  --color-border: var(--slate-700);
+  --color-border-strong: var(--slate-600);
+
+  --color-success-bg: rgba(5, 150, 105, 0.12);
+  --color-warning-bg: rgba(217, 119, 6, 0.12);
+  --color-danger-bg: rgba(220, 38, 38, 0.12);
+  --color-info-bg: rgba(37, 99, 235, 0.12);
+  --color-accent-bg: rgba(124, 58, 237, 0.12);
 }

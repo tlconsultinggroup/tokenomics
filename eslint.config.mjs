@@ -28,6 +28,11 @@ export default [
       ...js.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
       'react-hooks/rules-of-hooks': 'error',
+      // Base no-unused-vars doesn't understand TS-only constructs (interface
+      // method signatures, type-only params), producing false positives.
+      // The TS-aware version replaces it.
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
 ]

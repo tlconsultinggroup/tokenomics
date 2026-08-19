@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { getVersion } from "@tauri-apps/api/app";
 import { DailyData, DataPaths } from "../../lib/types";
 import { api } from "../../lib/api";
 import { SUPPORTED_TOOLS } from "../../lib/supportedTools";
+import { useUpdater } from "../../lib/hooks/useUpdater";
 
 interface ToolsTabProps {
   monthlyData: DailyData;
@@ -17,12 +19,20 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
   const [paths, setPaths] = useState<DataPaths | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [appVersion, setAppVersion] = useState<string | null>(null);
+  const { status, checkForUpdate, installUpdate } = useUpdater();
 
   useEffect(() => {
     api.settings
       .getPaths()
       .then(setPaths)
       .catch((err) => console.error("Could not fetch paths:", err));
+  }, []);
+
+  useEffect(() => {
+    getVersion()
+      .then(setAppVersion)
+      .catch(() => setAppVersion(null));
   }, []);
 
   const enabledClients = paths?.enabledClients ?? ["claude", "opencode", "cursor", "copilot"];
@@ -74,6 +84,64 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
         <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)" }}>
           Data pipelines currently wired into Tokenomics and full catalog of supported AI tools
         </p>
+      </div>
+
+      {/* App Updates */}
+      <div
+        className="card"
+        style={{
+          padding: "var(--spacing-md) var(--spacing-lg)",
+          marginBottom: "var(--spacing-xl)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "var(--spacing-md)",
+        }}
+      >
+        <div>
+          <h4 style={{ margin: 0, fontSize: "var(--font-size-base)", fontWeight: "var(--font-weight-bold)" }}>
+            Tokenomics {appVersion ? `v${appVersion}` : ""}
+          </h4>
+          <p style={{ margin: "4px 0 0 0", fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
+            {status.state === "idle" && "Check GitHub Releases for a newer build"}
+            {status.state === "checking" && "Checking for updates…"}
+            {status.state === "up-to-date" && "You're on the latest version"}
+            {status.state === "available" && `Version ${status.version} is available`}
+            {status.state === "downloading" && `Downloading update… ${Math.round(status.progress * 100)}%`}
+            {status.state === "ready" && "Update installed — restarting…"}
+            {status.state === "error" && `Update check failed: ${status.message}`}
+          </p>
+        </div>
+
+        {status.state === "available" ? (
+          <button
+            onClick={installUpdate}
+            style={{
+              background: "var(--brand-600)",
+              color: "var(--color-text-on-brand)",
+              padding: "var(--spacing-sm) var(--spacing-lg)",
+              borderRadius: "var(--radius-md)",
+              border: "none",
+            }}
+          >
+            Download &amp; install
+          </button>
+        ) : (
+          <button
+            onClick={checkForUpdate}
+            disabled={status.state === "checking" || status.state === "downloading"}
+            style={{
+              background: "var(--color-bg-surface-muted)",
+              color: "var(--color-text-primary)",
+              padding: "var(--spacing-sm) var(--spacing-lg)",
+              borderRadius: "var(--radius-md)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            {status.state === "checking" ? "Checking…" : "Check for updates"}
+          </button>
+        )}
       </div>
 
       {/* Summary KPI Badges */}

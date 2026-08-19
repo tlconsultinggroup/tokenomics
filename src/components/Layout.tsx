@@ -2,6 +2,8 @@ import { useEffect, useState, type CSSProperties } from "react";
 import Dashboard from "./Dashboard";
 import Footer from "./Footer";
 import Logo, { Wordmark } from "./Logo";
+import ThemeToggle from "./ThemeToggle";
+import WindowControls from "./WindowControls";
 import { api } from "../lib/api";
 
 const TABS = ["daily", "weekly", "monthly", "tools"] as const;
@@ -41,6 +43,7 @@ export default function Layout() {
       }}
     >
       <header
+        data-tauri-drag-region
         style={{
           position: "sticky",
           top: 0,
@@ -151,42 +154,47 @@ export default function Layout() {
             </div>
           </div>
 
-          {username && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                background: "rgba(255, 255, 255, 0.08)",
-                border: "1px solid rgba(255, 255, 255, 0.15)",
-                borderRadius: "20px",
-                padding: "4px 12px",
-                color: "#ffffff",
-                fontSize: "var(--font-size-xs)",
-                fontWeight: 500,
-                backdropFilter: "blur(4px)",
-              }}
-            >
-              <span
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {username && (
+              <div
                 style={{
-                  width: "22px",
-                  height: "22px",
-                  borderRadius: "50%",
-                  background: "linear-gradient(135deg, var(--brand-400), var(--brand-600))",
-                  display: "inline-flex",
+                  display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "11px",
-                  fontWeight: 700,
+                  gap: "8px",
+                  background: "rgba(255, 255, 255, 0.08)",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  borderRadius: "20px",
+                  padding: "4px 12px",
                   color: "#ffffff",
-                  textTransform: "uppercase",
+                  fontSize: "var(--font-size-xs)",
+                  fontWeight: 500,
+                  backdropFilter: "blur(4px)",
                 }}
               >
-                {username.charAt(0)}
-              </span>
-              <span>{username}</span>
-            </div>
-          )}
+                <span
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                    borderRadius: "50%",
+                    background: "linear-gradient(135deg, var(--brand-400), var(--brand-600))",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    color: "#ffffff",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {username.charAt(0)}
+                </span>
+                <span>{username}</span>
+              </div>
+            )}
+
+            <ThemeToggle />
+            <WindowControls />
+          </div>
         </div>
       </header>
 
