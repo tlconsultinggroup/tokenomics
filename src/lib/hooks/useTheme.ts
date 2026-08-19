@@ -25,7 +25,20 @@ export const useTheme = create<ThemeState>()(
       },
       setReduceMotion: (value) => set({ reduceMotion: value }),
     }),
-    { name: "tokenomics-theme" }
+    {
+      name: "tokenomics-theme",
+      version: 1,
+      // v0 installs may have "system" persisted from before dark became the
+      // default - force it to dark once so existing users actually see the
+      // new default instead of their stale cached value winning.
+      migrate: (persisted, version) => {
+        const state = persisted as ThemeState;
+        if (version < 1) {
+          return { ...state, theme: "dark" };
+        }
+        return state;
+      },
+    }
   )
 );
 
