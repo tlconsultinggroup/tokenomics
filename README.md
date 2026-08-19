@@ -36,7 +36,6 @@ Download the installer for your platform from [Releases](https://github.com/tlco
 
 - **Windows**: `Tokenomics_x.y.z_x64-setup.exe` — double-click, next-next-finish.
 - **macOS**: `Tokenomics_x.y.z_aarch64.dmg` / `x64.dmg` — drag into Applications.
-- **Linux**: `.deb`, `.rpm`, or `.AppImage`.
 
 Tokenomics is a native app: nothing to install first, no Node/Rust/C++ toolchain needed. It scans local session files only and never sends data anywhere.
 
@@ -94,7 +93,7 @@ The built binary is self-contained; it does not require any other repository or 
 
 ### Publishing a release
 
-Push a `v*` tag (e.g. `v0.2.0`) and the [release workflow](.github/workflows/release.yml) builds Windows, macOS, and Linux installers and attaches them as a draft GitHub Release:
+Push a `v*` tag (e.g. `v0.2.0`) and the [release workflow](.github/workflows/release.yml) builds Windows and macOS installers and attaches them as a draft GitHub Release:
 
 ```bash
 git tag v0.2.0
