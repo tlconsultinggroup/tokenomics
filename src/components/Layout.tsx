@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Dashboard from "./Dashboard";
 import Footer from "./Footer";
 import Logo, { Wordmark } from "./Logo";
@@ -26,12 +26,24 @@ const CONTAINER_STYLE: CSSProperties = {
 export default function Layout() {
   const [currentTab, setCurrentTab] = useState<Tab>("daily");
   const [username, setUsername] = useState<string | null>(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     api.system
       .getUser()
       .then((res) => setUsername(res.username))
       .catch(() => setUsername(null));
+  }, []);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const updateHeight = () => setHeaderHeight(header.offsetHeight);
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -43,6 +55,7 @@ export default function Layout() {
       }}
     >
       <header
+        ref={headerRef}
         data-tauri-drag-region
         style={{
           position: "sticky",
@@ -204,6 +217,9 @@ export default function Layout() {
 
       <nav
         style={{
+          position: "sticky",
+          top: headerHeight,
+          zIndex: 9,
           borderBottom: "1px solid var(--color-border)",
           background: "var(--color-bg-surface)",
         }}
@@ -216,7 +232,7 @@ export default function Layout() {
                 key={tab}
                 onClick={() => setCurrentTab(tab)}
                 style={{
-                  padding: "var(--spacing-sm) var(--spacing-xs)",
+                  padding: "var(--spacing-xs) var(--spacing-xs)",
                   margin: "0 0 -1px 0",
                   borderRadius: 0,
                   border: "none",
