@@ -157,10 +157,10 @@ export default function Layout() {
                   margin: "2px 0 0 0",
                   fontSize: "var(--font-size-xs)",
                   color: "var(--color-header-text-secondary)",
-                  fontWeight: 500,
+                  fontWeight: 300,
                 }}
               >
-                Token usage and cost tracking across your AI coding tools
+                Local Token Usage &amp; Cost Tracker
               </p>
             </div>
           </div>
