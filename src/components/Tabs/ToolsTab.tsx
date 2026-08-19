@@ -1,10 +1,12 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { getVersion } from "@tauri-apps/api/app";
 import { open } from "@tauri-apps/plugin-shell";
+import { useQuery } from "@tanstack/react-query";
 import { DailyData, DataPaths } from "../../lib/types";
 import { api } from "../../lib/api";
 import { SUPPORTED_TOOLS } from "../../lib/supportedTools";
 import { useUpdater } from "../../lib/hooks/useUpdater";
+import { useTaskbarThresholds } from "../../lib/hooks/useTaskbarThresholds";
 
 interface ToolsTabProps {
   monthlyData: DailyData;
@@ -41,6 +43,30 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [appVersion, setAppVersion] = useState<string | null>(null);
   const { status, checkForUpdate, installUpdate } = useUpdater();
+
+  const amberThreshold = useTaskbarThresholds((s) => s.amberThreshold);
+  const redThreshold = useTaskbarThresholds((s) => s.redThreshold);
+  const setAmberThreshold = useTaskbarThresholds((s) => s.setAmberThreshold);
+  const setRedThreshold = useTaskbarThresholds((s) => s.setRedThreshold);
+  const [amberInput, setAmberInput] = useState(String(amberThreshold));
+  const [redInput, setRedInput] = useState(String(redThreshold));
+
+  const { data: dailyData } = useQuery({
+    queryKey: ["dashboard", "daily"],
+    queryFn: () => api.data.getDaily(),
+    staleTime: 1000 * 60 * 5,
+  });
+  const currentHourTokens = dailyData?.timeSeries?.length
+    ? dailyData.timeSeries[dailyData.timeSeries.length - 1].totalTokens
+    : null;
+  const currentLevel =
+    currentHourTokens === null
+      ? null
+      : currentHourTokens >= redThreshold
+        ? "red"
+        : currentHourTokens >= amberThreshold
+          ? "amber"
+          : "green";
 
   useEffect(() => {
     api.settings
@@ -162,6 +188,84 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
             {status.state === "checking" ? "Checking…" : "Check for updates"}
           </button>
         )}
+      </div>
+
+      {/* Taskbar Icon Thresholds */}
+      <div className="card" style={{ padding: "var(--spacing-md) var(--spacing-lg)", marginBottom: "var(--spacing-xl)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "var(--spacing-md)", marginBottom: "var(--spacing-md)" }}>
+          <div>
+            <h4 style={{ margin: 0, fontSize: "var(--font-size-base)", fontWeight: "var(--font-weight-bold)" }}>
+              Taskbar Icon Thresholds
+            </h4>
+            <p style={{ margin: "4px 0 0 0", fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
+              Current-hour token volume (input + output + cache) at which the taskbar icon switches color
+            </p>
+          </div>
+
+          {currentLevel && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                fontSize: "var(--font-size-xs)",
+                color: "var(--color-text-secondary)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  background: currentLevel === "red" ? "#ef4444" : currentLevel === "amber" ? "#f59e0b" : "#22c55e",
+                  display: "inline-block",
+                }}
+              />
+              This hour: {formatTokens(currentHourTokens ?? 0)} tokens ({currentLevel})
+            </div>
+          )}
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--spacing-lg)" }}>
+          <label style={{ display: "flex", flexDirection: "column", gap: "4px", fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
+            Amber at (tokens/hour)
+            <input
+              type="number"
+              min={0}
+              value={amberInput}
+              onChange={(e) => setAmberInput(e.target.value)}
+              onBlur={() => {
+                const parsed = parseInt(amberInput, 10);
+                if (!isNaN(parsed) && parsed >= 0 && parsed < redThreshold) {
+                  setAmberThreshold(parsed);
+                } else {
+                  setAmberInput(String(amberThreshold));
+                }
+              }}
+              style={{ width: "140px" }}
+            />
+          </label>
+
+          <label style={{ display: "flex", flexDirection: "column", gap: "4px", fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
+            Red at (tokens/hour)
+            <input
+              type="number"
+              min={0}
+              value={redInput}
+              onChange={(e) => setRedInput(e.target.value)}
+              onBlur={() => {
+                const parsed = parseInt(redInput, 10);
+                if (!isNaN(parsed) && parsed > amberThreshold) {
+                  setRedThreshold(parsed);
+                } else {
+                  setRedInput(String(redThreshold));
+                }
+              }}
+              style={{ width: "140px" }}
+            />
+          </label>
+        </div>
       </div>
 
       {/* Summary KPI Badges */}

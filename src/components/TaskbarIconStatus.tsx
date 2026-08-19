@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { api } from "../lib/api";
+import { useTaskbarThresholds } from "../lib/hooks/useTaskbarThresholds";
 
 const ICON_PATHS = {
   green: "/status-icons/green.png",
@@ -11,16 +12,9 @@ const ICON_PATHS = {
 
 type Level = keyof typeof ICON_PATHS;
 
-// Current-hour token volume (input + output + cache) thresholds for the
-// taskbar icon color. These are estimates, not measured team baselines -
-// adjust if green/amber/red don't line up with what "low/medium/high"
-// actually looks like for your usage.
-const AMBER_THRESHOLD = 30_000;
-const RED_THRESHOLD = 150_000;
-
-function levelFor(tokens: number): Level {
-  if (tokens >= RED_THRESHOLD) return "red";
-  if (tokens >= AMBER_THRESHOLD) return "amber";
+function levelFor(tokens: number, amberThreshold: number, redThreshold: number): Level {
+  if (tokens >= redThreshold) return "red";
+  if (tokens >= amberThreshold) return "amber";
   return "green";
 }
 
@@ -29,6 +23,9 @@ function levelFor(tokens: number): Level {
 // with the Daily tab, but polls independently so the icon updates even
 // while the user is on a different tab.
 export default function TaskbarIconStatus() {
+  const amberThreshold = useTaskbarThresholds((s) => s.amberThreshold);
+  const redThreshold = useTaskbarThresholds((s) => s.redThreshold);
+
   const { data } = useQuery({
     queryKey: ["dashboard", "daily"],
     queryFn: () => api.data.getDaily(),
@@ -43,7 +40,7 @@ export default function TaskbarIconStatus() {
     if (!timeSeries || timeSeries.length === 0) return;
 
     const currentHourTokens = timeSeries[timeSeries.length - 1].totalTokens;
-    const level = levelFor(currentHourTokens);
+    const level = levelFor(currentHourTokens, amberThreshold, redThreshold);
 
     if (level === lastLevel.current) return;
     lastLevel.current = level;
@@ -52,7 +49,7 @@ export default function TaskbarIconStatus() {
       .then((res) => res.arrayBuffer())
       .then((buf) => getCurrentWindow().setIcon(new Uint8Array(buf)))
       .catch((err) => console.error("Could not update taskbar icon:", err));
-  }, [data]);
+  }, [data, amberThreshold, redThreshold]);
 
   return null;
 }
