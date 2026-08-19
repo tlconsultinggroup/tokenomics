@@ -76,8 +76,10 @@ export default function PageBackground() {
       const isGreen = Math.random() > 0.45;
       const palette = isGreen ? GREEN_COLORS : GREY_COLORS;
       const color = palette[Math.floor(Math.random() * palette.length)];
-      // Wide range of speed factors (0.3 to 2.8) so each dot moves at its own unique speed
-      const speedFactor = 0.3 + Math.random() * 2.5;
+      // Wide range of speed factors so each dot moves at its own unique
+      // (slow, ambient) speed - kept low so the background stays calm and
+      // doesn't compete for attention with the dashboard content.
+      const speedFactor = 0.12 + Math.random() * 0.9;
 
       // ~20% of particles get larger radii (7px to 11px), the rest range from 2px to 6.5px
       const isLarge = Math.random() < 0.2;
@@ -86,8 +88,8 @@ export default function PageBackground() {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 1.5 * speedFactor,
-        vy: (Math.random() - 0.5) * 1.5 * speedFactor,
+        vx: (Math.random() - 0.5) * 0.5 * speedFactor,
+        vy: (Math.random() - 0.5) * 0.5 * speedFactor,
         radius,
         color,
         baseAlpha: isLarge ? 0.35 + Math.random() * 0.3 : 0.2 + Math.random() * 0.45,
@@ -111,21 +113,22 @@ export default function PageBackground() {
           if (distSq < scatterRadius * scatterRadius && distSq > 0) {
             const dist = Math.sqrt(distSq);
             // Outward force pushing particles away, scaled by each dot's speed factor
-            const force = ((scatterRadius - dist) / scatterRadius) * 1.2 * p.speedFactor;
+            const force = ((scatterRadius - dist) / scatterRadius) * 0.4 * p.speedFactor;
             p.vx += (dx / dist) * force;
             p.vy += (dy / dist) * force;
           }
         }
 
-        // Mild velocity dampening so particles glide and scatter fluidly
-        p.vx *= 0.94;
-        p.vy *= 0.94;
+        // Stronger velocity dampening so particles glide slowly rather than
+        // scatter energetically.
+        p.vx *= 0.9;
+        p.vy *= 0.9;
 
         // Ensure ongoing ambient drift scaled by individual speed factor
         const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-        if (speed < 0.3 * p.speedFactor) {
-          p.vx += (Math.random() - 0.5) * 0.2 * p.speedFactor;
-          p.vy += (Math.random() - 0.5) * 0.2 * p.speedFactor;
+        if (speed < 0.12 * p.speedFactor) {
+          p.vx += (Math.random() - 0.5) * 0.08 * p.speedFactor;
+          p.vy += (Math.random() - 0.5) * 0.08 * p.speedFactor;
         }
 
         // Update position
