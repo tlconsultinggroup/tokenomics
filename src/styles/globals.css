@@ -120,13 +120,21 @@ html[data-reduce-motion="true"] .wave-line-4 {
 }
 
 /* Header Responsive Layout & Window Controls Protection */
+.header-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 4px 6px 0 6px;
+  position: relative;
+  z-index: 20;
+}
+
 .header-container {
   max-width: 1152px;
   margin: 0 auto;
   width: 100%;
   position: relative;
   padding: var(--spacing-md) var(--spacing-xl);
-  padding-right: calc(var(--spacing-xl) + 144px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -246,7 +254,7 @@ html[data-reduce-motion="true"] .wave-line-4 {
 @media (max-width: 850px) {
   .header-container {
     padding-left: var(--spacing-md);
-    padding-right: calc(var(--spacing-md) + 144px);
+    padding-right: var(--spacing-md);
     gap: var(--spacing-sm);
   }
 
@@ -267,7 +275,7 @@ html[data-reduce-motion="true"] .wave-line-4 {
 @media (max-width: 620px) {
   .header-container {
     padding-left: var(--spacing-sm);
-    padding-right: calc(var(--spacing-sm) + 144px);
+    padding-right: var(--spacing-sm);
   }
 
   .user-badge-name {

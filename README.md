@@ -104,6 +104,10 @@ Review the draft release and publish it once the installers look right.
 
 ## Architecture
 
+For an in-depth technical breakdown including flowcharts, data ingestion sequence diagrams, pricing resolution hierarchy, and tiered token cost math, see:
+- [Architecture Specification (Markdown)](docs/architecture.md)
+- [Interactive Architecture Specification (HTML)](docs/architecture.html)
+
 - **Backend**: Rust (Tauri 2). Local file scanning, parsing, and cost aggregation logic lives in `src-tauri/tokenomics-core`, a fully self-contained crate vendored into this repository, plus the Tauri command layer in `src-tauri/src`.
 - **Frontend**: React 19 + TypeScript, built with Vite.
 - **Storage**: settings are stored locally at `%APPDATA%/tokenomics/settings.json` on Windows (the OS-appropriate config directory elsewhere). No data is sent anywhere.

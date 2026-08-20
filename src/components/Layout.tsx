@@ -115,6 +115,10 @@ export default function Layout() {
           </g>
         </svg>
 
+        <div className="header-controls-row" data-tauri-drag-region>
+          <WindowControls />
+        </div>
+
         <div className="header-container" data-tauri-drag-region>
           <div className="header-left" data-tauri-drag-region>
             <span className="header-logo-wrapper">
@@ -145,8 +149,6 @@ export default function Layout() {
             </div>
           </div>
         </div>
-
-        <WindowControls />
       </header>
 
       <nav
