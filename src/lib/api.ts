@@ -16,6 +16,8 @@ async function invokeCommand<T>(cmd: string, args?: Record<string, unknown>): Pr
 export const api = {
   system: {
     getUser: () => invokeCommand<{ username: string }>("get_system_user"),
+    setTaskbarIcon: (iconBytes: Uint8Array) =>
+      invokeCommand("set_taskbar_icon", { iconBytes: Array.from(iconBytes) }),
   },
 
   data: {

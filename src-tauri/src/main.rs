@@ -26,6 +26,7 @@ pub fn run() {
             commands::settings::add_custom_path,
             commands::settings::remove_custom_path,
             commands::scan::trigger_scan,
+            commands::window::set_taskbar_icon,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

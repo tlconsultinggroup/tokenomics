@@ -47,7 +47,14 @@ export default function TaskbarIconStatus() {
 
     fetch(ICON_PATHS[level])
       .then((res) => res.arrayBuffer())
-      .then((buf) => getCurrentWindow().setIcon(new Uint8Array(buf)))
+      .then((buf) => {
+        const bytes = new Uint8Array(buf);
+        // getCurrentWindow().setIcon() only updates ICON_SMALL on Windows
+        // (title bar / Alt+Tab) - it never reaches ICON_BIG, which is what
+        // the taskbar button itself reads. set_taskbar_icon sends
+        // WM_SETICON for both slots directly so the taskbar stays in sync.
+        return Promise.all([getCurrentWindow().setIcon(bytes), api.system.setTaskbarIcon(bytes)]);
+      })
       .catch((err) => console.error("Could not update taskbar icon:", err));
   }, [data, amberThreshold, redThreshold]);
 

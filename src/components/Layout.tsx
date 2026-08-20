@@ -61,60 +61,6 @@ export default function Layout() {
             boxShadow: "var(--shadow-sm)",
           }}
         >
-        {/* Slow-drifting wave lines, same technique as the ai-advisory
-            sibling project, faded out toward the left so it reads as an
-            ambient accent rather than competing with the title. */}
-        <svg
-          aria-hidden
-          viewBox="0 0 1600 60"
-          preserveAspectRatio="xMidYMid slice"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            opacity: 0.45,
-            pointerEvents: "none",
-            maskImage: "linear-gradient(to right, transparent 55%, black 92%)",
-            WebkitMaskImage: "linear-gradient(to right, transparent 55%, black 92%)",
-          }}
-        >
-          <g className="wave-line wave-line-1">
-            <path
-              d="M -200 23 C 100 5, 300 40, 600 23 S 1100 4, 1400 23 S 1800 40, 2000 23"
-              fill="none"
-              stroke="var(--brand-200)"
-              strokeWidth="1.5"
-            />
-          </g>
-          <g className="wave-line wave-line-2">
-            <path
-              d="M -200 39 C 150 53, 350 17, 650 39 S 1150 57, 1450 39 S 1850 17, 2050 39"
-              fill="none"
-              stroke="var(--brand-300)"
-              strokeWidth="1.5"
-              strokeDasharray="2 10"
-            />
-          </g>
-          <g className="wave-line wave-line-3">
-            <path
-              d="M -200 12 C 120 31, 380 -9, 680 17 S 1180 36, 1480 17 S 1880 -9, 2080 17"
-              fill="none"
-              stroke="var(--brand-500)"
-              strokeWidth="1"
-              opacity="0.5"
-            />
-          </g>
-          <g className="wave-line wave-line-4">
-            <path
-              d="M -200 48 C 100 33, 340 65, 640 48 S 1140 31, 1440 48 S 1840 65, 2040 48"
-              fill="none"
-              stroke="var(--brand-100)"
-              strokeWidth="1.5"
-            />
-          </g>
-        </svg>
-
         <div className="header-controls-row" data-tauri-drag-region>
           <WindowControls />
         </div>
