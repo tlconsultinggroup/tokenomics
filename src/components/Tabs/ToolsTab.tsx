@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { getVersion } from "@tauri-apps/api/app";
 import { open } from "@tauri-apps/plugin-shell";
 import { useQuery } from "@tanstack/react-query";
@@ -37,6 +37,72 @@ function ExternalLinkIcon() {
   );
 }
 
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ transform: open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.15s ease" }}
+    >
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+  );
+}
+
+function CollapsibleSection({
+  title,
+  subtitle,
+  open,
+  onToggle,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  open: boolean;
+  onToggle: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <div style={{ marginBottom: "var(--spacing-2xl)" }}>
+      <button
+        onClick={onToggle}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "var(--spacing-sm)",
+          width: "100%",
+          background: "none",
+          border: "none",
+          padding: 0,
+          marginBottom: "var(--spacing-md)",
+          cursor: "pointer",
+          textAlign: "left",
+        }}
+      >
+        <span style={{ color: "var(--color-text-secondary)", flexShrink: 0 }}>
+          <ChevronIcon open={open} />
+        </span>
+        <span>
+          <h4 style={{ margin: 0, fontSize: "var(--font-size-base)", fontWeight: "var(--font-weight-bold)" }}>
+            {title}
+          </h4>
+          <p style={{ margin: 0, fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
+            {subtitle}
+          </p>
+        </span>
+      </button>
+
+      {open && <div>{children}</div>}
+    </div>
+  );
+}
+
 export default function ToolsTab({ monthlyData }: ToolsTabProps) {
   const [paths, setPaths] = useState<DataPaths | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,6 +116,9 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
   const setRedThreshold = useTaskbarThresholds((s) => s.setRedThreshold);
   const [amberInput, setAmberInput] = useState(String(amberThreshold));
   const [redInput, setRedInput] = useState(String(redThreshold));
+  const [showWiredPipelines, setShowWiredPipelines] = useState(false);
+  const [showToolsDirectory, setShowToolsDirectory] = useState(false);
+  const [showCostMethodology, setShowCostMethodology] = useState(false);
 
   const { data: dailyData } = useQuery({
     queryKey: ["dashboard", "daily"],
@@ -327,18 +396,12 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
       </div>
 
       {/* SECTION 1: Wired & Active Data Sources */}
-      <div style={{ marginBottom: "var(--spacing-2xl)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--spacing-md)" }}>
-          <div>
-            <h4 style={{ margin: 0, fontSize: "var(--font-size-base)", fontWeight: "var(--font-weight-bold)" }}>
-              Wired Data Pipelines
-            </h4>
-            <p style={{ margin: 0, fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
-              AI coding tools actively monitored on your machine
-            </p>
-          </div>
-        </div>
-
+      <CollapsibleSection
+        title="Wired Data Pipelines"
+        subtitle="AI coding tools actively monitored on your machine"
+        open={showWiredPipelines}
+        onToggle={() => setShowWiredPipelines((v) => !v)}
+      >
         <div
           style={{
             display: "grid",
@@ -442,19 +505,15 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
             </div>
           ))}
         </div>
-      </div>
+      </CollapsibleSection>
 
       {/* SECTION 2: Supported AI Tools Directory Catalog */}
-      <div style={{ marginBottom: "var(--spacing-2xl)" }}>
-        <div style={{ marginBottom: "var(--spacing-md)" }}>
-          <h4 style={{ margin: 0, fontSize: "var(--font-size-base)", fontWeight: "var(--font-weight-bold)" }}>
-            Supported Tools Directory ({SUPPORTED_TOOLS.length}+)
-          </h4>
-          <p style={{ margin: 0, fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
-            All local AI coding tools natively parsed by Tokenomics
-          </p>
-        </div>
-
+      <CollapsibleSection
+        title={`Supported Tools Directory (${SUPPORTED_TOOLS.length}+)`}
+        subtitle="All local AI coding tools natively parsed by Tokenomics"
+        open={showToolsDirectory}
+        onToggle={() => setShowToolsDirectory((v) => !v)}
+      >
         {/* Filter Controls */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--spacing-sm)", marginBottom: "var(--spacing-md)", alignItems: "center" }}>
           <input
@@ -563,19 +622,15 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
             );
           })}
         </div>
-      </div>
+      </CollapsibleSection>
 
       {/* SECTION 3: Pricing Methodology */}
-      <div style={{ marginBottom: "var(--spacing-2xl)" }}>
-        <div style={{ marginBottom: "var(--spacing-md)" }}>
-          <h4 style={{ margin: 0, fontSize: "var(--font-size-base)", fontWeight: "var(--font-weight-bold)" }}>
-            How Cost Is Calculated
-          </h4>
-          <p style={{ margin: 0, fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)" }}>
-            Where per-model rates come from and how they're applied to your token counts
-          </p>
-        </div>
-
+      <CollapsibleSection
+        title="How Cost Is Calculated"
+        subtitle="Where per-model rates come from and how they're applied to your token counts"
+        open={showCostMethodology}
+        onToggle={() => setShowCostMethodology((v) => !v)}
+      >
         <div
           style={{
             display: "grid",
@@ -652,7 +707,7 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
             is cached locally for 1 hour; if a source is unreachable, the app falls back to the last successful fetch rather than failing.
           </p>
         </div>
-      </div>
+      </CollapsibleSection>
 
       {/* SECTION 4: Privacy Info */}
       <div
@@ -668,10 +723,8 @@ export default function ToolsTab({ monthlyData }: ToolsTabProps) {
           Local Session Data, Networked Pricing
         </h4>
         <p style={{ fontSize: "var(--font-size-xs)", color: "var(--slate-300)", lineHeight: 1.6, margin: 0 }}>
-          Tokenomics scans session logs stored locally on your device by AI assistants (Claude Code, OpenCode, Cursor, Copilot, etc.). No API keys
-          or cloud credentials are required, and no prompt text, session content, or usage telemetry is ever sent anywhere. Token counting and
-          aggregation run entirely offline. The only outbound network calls are the three pricing sources above, fetching public per-model rates,
-          never your usage data, cached locally so the app still works offline between refreshes.
+          Your session logs never leave your device — Tokenomics reads them locally, with no API keys, accounts, or telemetry involved.
+          The only thing it fetches online is public pricing data, and that's cached so it still works offline.
         </p>
       </div>
     </div>
