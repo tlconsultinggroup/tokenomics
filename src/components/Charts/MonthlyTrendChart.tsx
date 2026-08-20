@@ -47,7 +47,7 @@ export default function MonthlyTrendChart({ timeSeries }: MonthlyTrendChartProps
         </div>
       </div>
 
-      <div style={{ width: "100%", height: 280 }}>
+      <div className="chart-container">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={data} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
             <defs>
@@ -60,13 +60,13 @@ export default function MonthlyTrendChart({ timeSeries }: MonthlyTrendChartProps
             <XAxis
               dataKey="label"
               stroke="var(--color-text-secondary)"
-              fontSize={12}
+              fontSize="var(--font-size-xs)"
               tickLine={false}
             />
             <YAxis
               yAxisId="left"
               stroke="var(--color-text-secondary)"
-              fontSize={12}
+              fontSize="var(--font-size-xs)"
               tickLine={false}
               tickFormatter={formatTokens}
             />
@@ -74,7 +74,7 @@ export default function MonthlyTrendChart({ timeSeries }: MonthlyTrendChartProps
               yAxisId="right"
               orientation="right"
               stroke="#7c3aed"
-              fontSize={12}
+              fontSize="var(--font-size-xs)"
               tickLine={false}
               tickFormatter={(v) => `$${v.toFixed(2)}`}
             />
@@ -84,7 +84,7 @@ export default function MonthlyTrendChart({ timeSeries }: MonthlyTrendChartProps
                 borderColor: "var(--color-border)",
                 borderRadius: "var(--radius-md)",
                 color: "var(--color-text-primary)",
-                fontSize: "12px",
+                fontSize: "var(--font-size-xs)",
                 boxShadow: "var(--shadow-md)",
               }}
               labelStyle={{ color: "var(--color-text-primary)" }}
@@ -94,7 +94,7 @@ export default function MonthlyTrendChart({ timeSeries }: MonthlyTrendChartProps
                 name,
               ]}
             />
-            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+            <Legend wrapperStyle={{ fontSize: "var(--font-size-xs)", paddingTop: "10px" }} />
             <Area
               yAxisId="left"
               type="monotone"

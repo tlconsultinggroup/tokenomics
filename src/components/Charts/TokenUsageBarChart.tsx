@@ -64,7 +64,7 @@ export default function TokenUsageBarChart({
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <span
               style={{
-                fontSize: "11px",
+                fontSize: "var(--font-size-xs)",
                 fontWeight: 600,
                 padding: "3px 10px",
                 borderRadius: "12px",
@@ -83,7 +83,7 @@ export default function TokenUsageBarChart({
         )}
       </div>
 
-      <div style={{ width: "100%", height: 260 }}>
+      <div className="chart-container">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.5} />
@@ -101,12 +101,12 @@ export default function TokenUsageBarChart({
             <XAxis
               dataKey="label"
               stroke="var(--color-text-secondary)"
-              fontSize={12}
+              fontSize="var(--font-size-xs)"
               tickLine={false}
             />
             <YAxis
               stroke="var(--color-text-secondary)"
-              fontSize={12}
+              fontSize="var(--font-size-xs)"
               tickLine={false}
               tickFormatter={formatTokens}
             />
@@ -116,7 +116,7 @@ export default function TokenUsageBarChart({
                 borderColor: "var(--color-border)",
                 borderRadius: "var(--radius-md)",
                 color: "var(--color-text-primary)",
-                fontSize: "12px",
+                fontSize: "var(--font-size-xs)",
                 boxShadow: "var(--shadow-md)",
               }}
               labelStyle={{ color: "var(--color-text-primary)" }}
@@ -126,7 +126,7 @@ export default function TokenUsageBarChart({
                 name,
               ]}
             />
-            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+            <Legend wrapperStyle={{ fontSize: "var(--font-size-xs)", paddingTop: "10px" }} />
             <Bar dataKey="Input Tokens" stackId="tokens" radius={[0, 0, 0, 0]}>
               {data.map((entry, index) => (
                 <Cell

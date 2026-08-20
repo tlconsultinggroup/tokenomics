@@ -72,7 +72,7 @@ function Card({ label, value, subtext, tone, icon }: CardProps) {
       className="card"
       style={{
         padding: "var(--spacing-md) var(--spacing-lg)",
-        minWidth: "180px",
+        minWidth: "clamp(140px, 16vw, 180px)",
         borderTop: `3px solid ${colors.fg}`,
         background: colors.bg,
       }}
@@ -171,7 +171,7 @@ export default function SummaryCards({ data }: SummaryCardsProps) {
           position: "relative",
           zIndex: 1,
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(clamp(150px, 18vw, 200px), 1fr))",
           gap: "var(--spacing-md)",
         }}
       >

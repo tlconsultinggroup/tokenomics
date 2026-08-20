@@ -61,37 +61,40 @@ export default function Layout() {
             boxShadow: "var(--shadow-sm)",
           }}
         >
-        <div className="header-controls-row" data-tauri-drag-region>
-          <WindowControls />
-        </div>
-
-        <div className="header-container" data-tauri-drag-region>
-          <div className="header-left" data-tauri-drag-region>
+        <div className="header-grid" data-tauri-drag-region>
+          <div className="header-logo-col" data-tauri-drag-region>
             <span className="header-logo-wrapper">
-              <Logo size={40} />
+              <Logo size={52} />
             </span>
+          </div>
+
+          <div className="header-controls-row" data-tauri-drag-region>
+            <WindowControls />
+          </div>
+
+          <div className="header-title-row" data-tauri-drag-region>
             <div className="header-title-block" data-tauri-drag-region>
               <h1 className="header-title" data-tauri-drag-region>
-                <Wordmark size={34} showBadge={true} onDark={true} />
+                <Wordmark size={30} showBadge={true} onDark={true} />
               </h1>
               <p className="header-subtitle" data-tauri-drag-region>
                 Local Token Usage &amp; Cost Tracker
               </p>
             </div>
-          </div>
 
-          <div className="header-right" data-tauri-drag-region>
-            {username && (
-              <div className="user-badge" data-tauri-drag-region>
-                <span className="user-avatar-circle">
-                  {username.charAt(0)}
-                </span>
-                <span className="user-badge-name">{username}</span>
+            <div className="header-right" data-tauri-drag-region>
+              {username && (
+                <div className="user-badge" data-tauri-drag-region>
+                  <span className="user-avatar-circle">
+                    {username.charAt(0)}
+                  </span>
+                  <span className="user-badge-name">{username}</span>
+                </div>
+              )}
+
+              <div className="theme-toggle-wrapper">
+                <ThemeToggle />
               </div>
-            )}
-
-            <div className="theme-toggle-wrapper">
-              <ThemeToggle />
             </div>
           </div>
         </div>
